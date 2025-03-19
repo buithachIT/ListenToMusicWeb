@@ -85,8 +85,15 @@ WSGI_APPLICATION = 'spotifyBackendProject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'spotify_db',       # Tên database
+        'USER': 'root',             # Tên user MySQL
+        'PASSWORD': '',# Mật khẩu MySQL
+        'HOST': 'localhost',        # Địa chỉ MySQL server
+        'PORT': '3306',             # Port mặc định
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'", 
+        },
     }
 }
 
@@ -131,3 +138,4 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+    
