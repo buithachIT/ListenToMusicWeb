@@ -1,0 +1,9 @@
+.divider-cus ::before {
+    span {
+        color: white !important;
+    }
+}
+.cus-placeholder input::placeholder {
+    color: #838383 !important;
+    opacity: 1 !important;
+}
