@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
     path('roles/', include('roles.urls')),
+    path('artists/', include('artists.urls')), 
     path('addtrack/',CreateTrackView.as_view(),name='track'),
     path('addartist/', CreateArtistView.as_view(), name='artist'),
     path('addablum/',CreateAlbumView.as_view(),name='ablum'),

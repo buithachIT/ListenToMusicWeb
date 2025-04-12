@@ -93,7 +93,7 @@ class DeleteTrackView(APIView):
         try:
             track = Tracks.objects.get(pk=track_id)
 
-            # ✅ Nếu track thuộc album nào đó, giảm total_tracks
+            # Nếu track thuộc album nào đó, giảm total_tracks
             if track.album:
                 album = track.album
                 if album.total_tracks is not None and album.total_tracks > 0:
