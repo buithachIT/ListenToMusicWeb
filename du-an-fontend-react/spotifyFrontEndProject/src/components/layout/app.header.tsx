@@ -5,7 +5,6 @@ const AppHeader = () => {
     return (
         <div>App header
             <div>
-                {JSON.stringify(user)}
             </div>
         </div>
 
