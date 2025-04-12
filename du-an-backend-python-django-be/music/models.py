@@ -88,7 +88,7 @@ class Tracks(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     image_url = models.TextField(blank=True, null=True)
     release_date = models.DateField(blank=True, null=True)
-
+    namemp3 = models.CharField(max_length=200)
     class Meta:
         managed = False
         db_table = 'tracks'
