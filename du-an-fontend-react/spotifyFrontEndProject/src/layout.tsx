@@ -1,9 +1,13 @@
-import { Outlet } from "react-router-dom"
+
 import AppHeader from "./components/layout/app.header";
 import { useEffect } from "react";
 import { fetchAccountAPI } from "./services/api";
 import { useCurrentApp } from "./components/context/app.context";
 import { PacmanLoader } from "react-spinners";
+import HomePage from "./pages/client/home";
+import PlayerBar from "./components/layout/playbar.bottom";
+
+
 
 function Layout() {
   const { setUser, isAppLoading, setIsAppLoading, setIsAuthenticated } = useCurrentApp();
@@ -21,10 +25,22 @@ function Layout() {
   return (
     <>
       {isAppLoading === false ?
-        <div>
+        <div className="flex flex-col h-screen relative">
+          {/* Header */}
           <AppHeader />
-          <Outlet />
-        </div>
+
+          {/* Content */}
+
+          <div className=" flex flex-1 overflow-hidden pb-20">
+
+            <HomePage />
+
+          </div>
+
+          {/* Player bar */}
+          <PlayerBar />
+
+        </div >
         :
         <div style={{
           position: "fixed",

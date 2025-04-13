@@ -1,0 +1,13 @@
+@import "tailwindcss";
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+
+
+/* Customize scroll */
+.simplebar-scrollbar:before {
+    background-color: #a0a0a0;
+}
+
+.simplebar-track.simplebar-vertical {
+    background: #000000;
+    border-radius: 8px;
+}

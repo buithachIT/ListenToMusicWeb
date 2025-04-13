@@ -20,10 +20,10 @@ declare global {
     interface IUser{
         isAuthenticated: boolean;
         user: {
+            user_id: string;
+            username: string;
             email: string;
-            fullname: string;
-            role: string;
-            id: string;
+            role_id: number;
         }
     }
 
@@ -31,9 +31,9 @@ declare global {
         access_token: string;
         user: {
             email: string;
-            fullname: string;
-            role: string;
-            id: string;
+            role_id: string;
+            user_id: string;
+            username: string;
         }
     }
     interface IRegister{

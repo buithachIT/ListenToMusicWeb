@@ -6,13 +6,17 @@ import {
 } from "react-router-dom";
 
 import Layout from './layout.tsx';
-import LoginPage from './pages/client/login.tsx';
-import HomePage from './pages/home.tsx';
-import RegisterPage from './pages/client/register.tsx';
+
 import './styles/global.scss'
-import { App, Divider } from 'antd';
+import { App, ConfigProvider } from 'antd';
 import { AppProvider } from './components/context/app.context.tsx';
 import ProtectedRoute from './components/auth/index.tsx';
+
+import HomePage from './pages/client/home.tsx';
+import LoginPage from './pages/client/auth/login.tsx';
+import RegisterPage from './pages/client/auth/register.tsx';
+import LayoutAdmin from './components/layout/admin/layout.admin.tsx';
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -36,20 +40,21 @@ const router = createBrowserRouter([
   {
     path: "/checkout",
     element: (
+
       <ProtectedRoute>
         <div>Checkout Page</div>
       </ProtectedRoute>
+
     )
   },
   {
     path: "/admin",
     element: (
       <ProtectedRoute>
-        <div>Admin page</div>
+        <LayoutAdmin />
       </ProtectedRoute>
     )
   }
-
 ]);
 
 createRoot(document.getElementById('root')!).render(
@@ -57,7 +62,9 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App>
       <AppProvider>
-        <RouterProvider router={router} />
+        <ConfigProvider >
+          <RouterProvider router={router} />
+        </ConfigProvider>
       </AppProvider>
     </App>
   </StrictMode>,

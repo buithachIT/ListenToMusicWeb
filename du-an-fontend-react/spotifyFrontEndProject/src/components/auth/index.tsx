@@ -9,7 +9,7 @@ const ProtectedRoute = (props: IProps) => {
     const { isAuthenticated, user } = useCurrentApp();
     const location = useLocation();
     console.log(location.pathname);
-
+    console.log("Check authenticated>>", isAuthenticated);
     if (isAuthenticated == false) {
         return (
             <Result
@@ -22,8 +22,9 @@ const ProtectedRoute = (props: IProps) => {
     }
     const isAdminRoute = location.pathname.includes("admin");
     if (isAuthenticated == true && isAdminRoute == true) {
-        const role = user?.role;
-        if (role == "USER") {
+        const role_id = user?.role_id;
+        console.log("Check role", user?.role_id)
+        if (role_id == 2 || role_id == 3) {
             return (
                 <Result
                     status="403"
