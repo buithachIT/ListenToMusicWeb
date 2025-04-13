@@ -1,0 +1,37 @@
+users
+
+GET : 	/users/list/      	xuất danh sách user
+PUT: 	/users/1/update/  	sửa thông tin user (1 là biến id)
+POST: 	/users/register/  	đăng ký, tạo người dùng
+POST: 	/users/login/    	đăng nhập
+DELETE: /users/1/delete/ 	xóa người dùng (1 là biến id )
+GET: 	/users/getuserbyid/1/ 	lấy thông tin user từ id (1 là biến id)
+GET:	/users/token/1/		lấy thông tin user từ token (1 là biến token)
+
+roles
+
+POST: 	/roles/create/    	tạo role mới
+GET:  	/roles/list/      	lấy ra danh sách role 
+PUT:  	/roles/1/update   	sửa thông tin của role
+DELETE: /roles/1/delete 	xóa thông tin của role
+
+artists
+
+POST: 	/artists/create/ 	tạo nghệ sĩ mới
+DELETE: /artists/delete/1/ 	xóa nghệ sĩ (1 là id nghệ sĩ)
+GET:	/artists/list/		lấy danh sách nghệ sĩ
+PUT: 	/artist/update/1 	sửa thông tin nghệ sĩ
+
+
+albums
+
+POST: 	/albums/create/		tạo ablum mới
+DELETE:	/albums/delete/1/	xóa ablum (1 là biến id)
+GET:	albums/getbyartist/1/  	lấy danh sách albums theo nghệ sĩ (1 là biến id của artists)
+
+tracks
+
+POST:	/tracks/create/ 	tạo mới bài hát
+DELETE: /tracks/delete/1/	xóa bài hát (1 là biến id)
+GET: 	/tracks/getbyartist/1/ 	lấy danh sách bài hát theo nghệ sĩ (1 là biến id của artists)
+GET: 	/tracks/getbyalbum/1/	lấy danh sách bài hát theo album (1 là biến id của albums)

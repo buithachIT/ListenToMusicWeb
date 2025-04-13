@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import UserSerializer
 from .models import Users 
+from rest_framework.decorators import api_view
 
 # Sự kiện đăng ký người dùng
 class RegisterUserView(APIView):
@@ -28,6 +29,7 @@ class LoginView(generics.GenericAPIView):
                 "user_id": user.user_id,
                 "user_name": user.user_name,
                 "email": user.email,
+                "role_id": user.role_id,
                 },
                 "message": "Đăng nhập thành công!",
                 "errors": status.HTTP_200_OK,            
@@ -66,3 +68,14 @@ class ListUsersView(APIView):
         serializer = UserSerializer(users, many=True)
         return Response({"data": serializer.data, "message": "Lấy danh sách người dùng thành công!"}, status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+def GetUserbyIdView(request, user_id):
+    users = Users.objects.filter(user_id=user_id)
+    serializer = UserSerializer(users, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def GetUserbyTokenView(request, accesstoken):
+    users = Users.objects.filter(accesstoken=accesstoken)
+    serializer = UserSerializer(users, many=True)
+    return Response(serializer.data)
