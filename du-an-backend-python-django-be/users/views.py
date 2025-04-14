@@ -4,6 +4,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import UserSerializer
 from .models import Users 
+<<<<<<< HEAD
+=======
+from rest_framework.decorators import api_view
+>>>>>>> bcd161744d1fcd440b67199d4c12899411df4d0d
 
 # Sự kiện đăng ký người dùng
 class RegisterUserView(APIView):
@@ -25,12 +29,18 @@ class LoginView(generics.GenericAPIView):
             user = serializer.validated_data['user']
             return Response({
                 "data":{
+<<<<<<< HEAD
                     "user":{
+=======
+>>>>>>> bcd161744d1fcd440b67199d4c12899411df4d0d
                 "user_id": user.user_id,
                 "user_name": user.user_name,
                 "email": user.email,
                 "role_id": user.role_id,
+<<<<<<< HEAD
                     }
+=======
+>>>>>>> bcd161744d1fcd440b67199d4c12899411df4d0d
                 },
                 "message": "Đăng nhập thành công!",
                 "errors": status.HTTP_200_OK,            
@@ -63,6 +73,7 @@ class DeleteUserView(APIView):
         return Response({"message": "Xóa người dùng thành công!"}, status=status.HTTP_204_NO_CONTENT)
 
 #Lấy ra danh sách người dùng   
+<<<<<<< HEAD
 class CurrentUserMockTokenView(APIView):
     def get(self, request):
         auth_header = request.headers.get('Authorization', '')
@@ -83,3 +94,22 @@ class CurrentUserMockTokenView(APIView):
             "data": serializer.data,
             "message": "Lấy thông tin người dùng thành công!"
         }, status=status.HTTP_200_OK)
+=======
+class ListUsersView(APIView):
+    def get(self, request):
+        users = Users.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response({"data": serializer.data, "message": "Lấy danh sách người dùng thành công!"}, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def GetUserbyIdView(request, user_id):
+    users = Users.objects.filter(user_id=user_id)
+    serializer = UserSerializer(users, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def GetUserbyTokenView(request, accesstoken):
+    users = Users.objects.filter(accesstoken=accesstoken)
+    serializer = UserSerializer(users, many=True)
+    return Response(serializer.data)
+>>>>>>> bcd161744d1fcd440b67199d4c12899411df4d0d

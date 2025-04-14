@@ -15,16 +15,25 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from music.views import RegisterUserView, LoginView
+from django.urls import path, include
+from music.views import *
+from users.views import *
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from music.views import CustomTokenObtainPairView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('register/',RegisterUserView.as_view(),name='register'),
-    path('login/', LoginView.as_view(), name='login'),
-    path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('users/', include('users.urls')),
+    path('roles/', include('roles.urls')),
+    path('artists/', include('artists.urls')), 
+    path('albums/', include('albums.urls')), 
+    path('tracks/', include('tracks.urls')), 
+
+    
+    path('addtrack/',CreateTrackView.as_view(),name='track'),
+    path('addartist/', CreateArtistView.as_view(), name='artist'),
+    path('addablum/',CreateAlbumView.as_view(),name='ablum'),
+    path('deletetrack/<int:track_id>/', DeleteTrackView.as_view(), name='delete-track'),
+    path('deletealbum/<int:album_id>/', DeleteAlbumView.as_view(), name='delete-album'),
+ 
 ]
                                                                             
