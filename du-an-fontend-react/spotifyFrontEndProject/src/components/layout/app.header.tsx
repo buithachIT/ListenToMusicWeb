@@ -1,6 +1,8 @@
 import React from "react";
+import { useCurrentApp } from "../context/app.context";
 
 const Navbar = () => {
+    const { user } = useCurrentApp();
     return (
         <nav className="flex justify-between items-center px-4 py-3 bg-black text-white">
             {/* Left section */}
@@ -104,10 +106,11 @@ const Navbar = () => {
                 </div>
 
                 <img
-                    src="https://randomuser.me/api/portraits/men/75.jpg"
+                    src="./image_thumb/ahung.jpg"
                     alt="avatar"
                     className="w-8 h-8 rounded-full border border-gray-700"
                 />
+                <p>Xin chào, {user?.full_name}</p>
             </div>
         </nav>
     );

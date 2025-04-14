@@ -34,7 +34,7 @@ export const fetchAccountAPI = () => {
 };
 
 //Get music
-export const getMusicAPI = () => {
-    const urlBackend = '/music/list/';
-    return axios.get<IBackendRes<IFetchAccount>>(urlBackend);
+export const getTrackAPI = () => {
+    const urlBackend = '/tracks/list/';
+    return axios.get<IBackendRes<ITrack[]>>(urlBackend);
 }

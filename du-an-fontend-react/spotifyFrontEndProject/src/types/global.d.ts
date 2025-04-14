@@ -20,10 +20,10 @@ declare global {
     interface IUser{
         isAuthenticated: boolean;
         user: {
+            full_name: string;
+            role_id: string;
             user_id: string;
-            username: string;
-            email: string;
-            role_id: number;
+            user_name: number;
         }
     }
 
@@ -43,5 +43,14 @@ declare global {
     }
     interface IFetchAccount{
         user : IUser
+    }
+    interface ITrack{
+        track_id: number;
+        title: string;
+        is_copyright : string;
+        price : string;
+        image_url : string;
+        release_date : string;
+        namemp3 : string;
     }
 }
