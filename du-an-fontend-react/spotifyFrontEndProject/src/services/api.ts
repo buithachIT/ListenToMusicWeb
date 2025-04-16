@@ -7,30 +7,15 @@ export const loginAPI = (user_name: string, password: string) => {
 }
 
 //Register
-export const registerAPI = (user_name: string, fullName: string, phone: string,  passwordhash: string) => {
+export const registerAPI = (user_name: string, fullname: string, phone: string,  password: string) => {
     const urlBackend = '/users/register/';
-    return axios.post<IBackendRes<IRegister>>(urlBackend, { user_name, fullName, phone, passwordhash });
+    return axios.post<IBackendRes<IRegister>>(urlBackend, { user_name, fullname, phone, password });
 }
 
 //Fetch account
 export const fetchAccountAPI = () => {
-    const token = localStorage.getItem("access_token");
-
-    if (!token) {
-        return { data: null, message: "No token found" };
-    }
-
-    // Giả lập response giống như BE thật
-    return {
-        data: {
-            user: {
-                user_id: 5,
-                full_name: "Bùi Thạch",
-                user_name: "buithach.it@gmail.com",
-                role_id: 1
-            }
-        }
-    };
+    const urlBackend = '/users/profile/';
+    return axios.get<IBackendRes<IRegister>>(urlBackend);
 };
 
 //Get music

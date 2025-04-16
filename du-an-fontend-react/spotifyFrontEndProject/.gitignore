@@ -1,24 +1,39 @@
-# Logs
-logs
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
 *.log
+
+# Env
+.env
+venv/
+env/
+
+# Django migrations
+*/migrations/
+db.sqlite3
+
+# VS Code
+.vscode/
+
+# MacOS system files
+.DS_Store
+# Node
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Env
+.env
+
+# Logs
 npm-debug.log*
 yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# MacOS system files
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+
+# Vite cache (nếu dùng Vite)
+.vite/

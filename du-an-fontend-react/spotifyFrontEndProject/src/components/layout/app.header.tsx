@@ -1,8 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
 import { useCurrentApp } from "../context/app.context";
+import { App, Avatar, Divider, Drawer, Dropdown, Space } from "antd";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-    const { user } = useCurrentApp();
+    const { isAuthenticated, setIsAuthenticated, user, setUser } = useCurrentApp();
+    const navigate = useNavigate();
+    const [openDrawer, setOpenDrawer] = useState(false);
+    const [openManageAccount, setOpenManageAccount] = useState<boolean>(false);
+    const { message } = App.useApp();
+
+    const handleLogout = () => {
+        localStorage.removeItem("access_token");
+        setIsAuthenticated(false);
+        setUser(null);
+        message.success("Đăng xuất thành công!")
+    }
+    let items = [
+        {
+            label: <label
+                style={{ cursor: 'pointer' }}
+                onClick={() => setOpenManageAccount(true)}
+            >Quản lý tài khoản</label>,
+            key: 'account',
+        },
+        {
+            label: <Link to="/history">Lịch sử mua hàng</Link>,
+            key: 'history',
+        },
+        {
+            label: <label
+                style={{ cursor: 'pointer' }}
+                onClick={() => handleLogout()}
+            >Đăng xuất</label>,
+            key: 'logout',
+        },
+
+    ];
+    if (user?.role_id == 1) {
+        items.unshift({
+            label: <Link to='/admin'>Trang quản trị</Link>,
+            key: 'admin',
+        })
+    }
+
     return (
         <nav className="flex justify-between items-center px-4 py-3 bg-black text-white">
             {/* Left section */}
@@ -104,15 +145,22 @@ const Navbar = () => {
                     </svg>
                     <span className="absolute top-0 right-0 w-2 h-2 bg-blue-500 rounded-full" />
                 </div>
+                {!isAuthenticated ?
+                    <span onClick={() => navigate('/login')}> Tài Khoản</span>
+                    :
 
-                <img
-                    src="./image_thumb/ahung.jpg"
-                    alt="avatar"
-                    className="w-8 h-8 rounded-full border border-gray-700"
-                />
-                <p>Xin chào, {user?.full_name}</p>
+                    <Dropdown menu={{ items }} trigger={['click']}>
+                        <Space >
+                            <Avatar src="./image_thumb/ahung.jpg" />
+                            {user?.fullName}
+                            <p>Xin chào, {user?.fullname}</p>
+                        </Space>
+
+                    </Dropdown>}
+
+
             </div>
-        </nav>
+        </nav >
     );
 };
 

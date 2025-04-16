@@ -66,7 +66,6 @@ const HomeContent = () => {
             < div className="grid grid-cols-6 gap-4" >
                 {listTrack.map((item, index) => {
                     return (
-
                         <div key={item.track_id} className="cursor-pointer hover:bg-[#1a1a1a] p-2 rounded">
                             <img src={item.image_url} alt={item.title} className="rounded mb-2" />
                             <h3 className="text-sm font-semibold">{item.title}</h3>

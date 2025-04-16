@@ -26,18 +26,20 @@ export const AppProvider = (props: TProps) => {
         const fetchAccount = async () => {
             const res = await fetchAccountAPI();
             if (res.data) {
+                console.log("Check res in context", res);
                 setUser(res.data.user);
-                console.log("Check user in context", user)
                 setIsAuthenticated(true);
             }
             else {
                 console.log("Lỗi fetch", res.message)
             }
+
             setIsAppLoading(false)
         }
 
         fetchAccount();
     }, [])
+    console.log("Check user in context>>", user)
     console.log("AppProvider mounted", isAuthenticated, user);
 
     return (

@@ -28,7 +28,7 @@ const RegisterForm: React.FC = () => {
             message.success("Đăng ký user thành công!")
             navigate("/login");
         } else {
-            message.error(res.message);
+            message.error(res.detail);
         }
         setIsSubmit(false);
     };

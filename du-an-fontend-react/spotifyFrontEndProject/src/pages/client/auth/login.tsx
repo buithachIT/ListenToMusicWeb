@@ -24,17 +24,18 @@ const LoginPage = () => {
         const res = await loginAPI(username, password);
 
         if (res.data) {
+            message.success("Thành công!");
             setIsAuthenticated(true);
             console.log("check authenticated in login", isAuthenticated);
 
-            localStorage.setItem('access_token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZ21haWwuY29tIiwicGhvbmUiOiIxMjM0NTY3ODkiLCJmdWxsTmFtZSI6IkknbSBVc2VyIiwicm9sZSI6IlVTRVIiLCJzdWIiOiI2N2I2MGRhZWRjY2RmNTM3OGUzZjA2ZjYiLCJhdmF0YXIiOiJlZTExY2JiMTkwNTJlNDBiMDdhYWMwY2EwNjBjMjNlZS5wbmciLCJpYXQiOjE3Mzk5ODQ5MDMsImV4cCI6MjYwMzk4NDkwM30.HqA4cfuCPYMNmhkoiFnbww7clvibSzuZLJFPY7iYhu8');
+            console.log('check access>>', res.data.access_token);
+            localStorage.setItem('access_token', res.data.access_token);
             setUser(res.data.user);
             console.log("check res user>> ", user)
-            message.success("Thành công!");
             navigate('/')
         } else {
             console.log("Check res if false>>", res)
-            message.error(res.detail);
+            message.error("Không thành công ", res.detail);
         }
     }
 

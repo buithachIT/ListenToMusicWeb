@@ -6,6 +6,7 @@ declare global {
         message: string;
         statusCode: number | string;
         data?: T;
+        detail: string;
     }
 
     interface IModelPaginate<T> {
@@ -26,9 +27,8 @@ declare global {
             user_name: number;
         }
     }
-
     interface ILogin{
-        access_token: string;
+       access_token: string;
         user: {
             email: string;
             role_id: string;
@@ -51,6 +51,7 @@ declare global {
         price : string;
         image_url : string;
         release_date : string;
-        namemp3 : string;
+        namemp3: string;
+        listen: number;
     }
 }
