@@ -14,8 +14,6 @@ const PlayerBar = () => {
         setIsPlaying(!isPlaying);
     }
 
-
-
     return (
         <div className="fixed bottom-0 left-0 right-0 h-24 bg-black border-t border-gray-800 flex items-center justify-between px-6 z-50 text-white">
             <audio ref={audioRef} src="/music_file/abc.mp3" />

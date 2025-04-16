@@ -43,7 +43,8 @@ const Navbar = () => {
             key: 'admin',
         })
     }
-
+    const urlAvatar = `${import.meta.env.VITE_BACKEND_URL}/media/image_thumb/ahung.jpg`;
+    console.log("Check url>>", urlAvatar);
     return (
         <nav className="flex justify-between items-center px-4 py-3 bg-black text-white">
             {/* Left section */}
@@ -151,7 +152,7 @@ const Navbar = () => {
 
                     <Dropdown menu={{ items }} trigger={['click']}>
                         <Space >
-                            <Avatar src="./image_thumb/ahung.jpg" />
+                            <Avatar src={urlAvatar} />
                             {user?.fullName}
                             <p>Xin chào, {user?.fullname}</p>
                         </Space>
