@@ -21,7 +21,7 @@ function Layout() {
       setIsAppLoading(false);
     }
     fetchAccount();
-  }, [])
+  }, []);
   return (
     <>
       {isAppLoading === false ?

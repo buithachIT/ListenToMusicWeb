@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { getTrackAPI } from '../../services/api';
+import { usePlayer } from '../context/player.context';
 
 const PlayerBar = () => {
     const [isPlaying, setIsPlaying] = useState(false);
@@ -13,20 +13,25 @@ const PlayerBar = () => {
         }
         setIsPlaying(!isPlaying);
     }
+    const { currentTrack } = usePlayer();
 
+    if (!currentTrack) return null
+    const urlTrack = `${import.meta.env.VITE_BACKEND_URL}/media/music_file/${encodeURIComponent(currentTrack.namemp3)}`
+
+    console.log("Check url track>>", urlTrack);
     return (
         <div className="fixed bottom-0 left-0 right-0 h-24 bg-black border-t border-gray-800 flex items-center justify-between px-6 z-50 text-white">
-            <audio ref={audioRef} src="/music_file/abc.mp3" />
+            <audio ref={audioRef} src={urlTrack} />
             {/* --- Left: Song Info --- */}
             <div className="flex items-center space-x-4 w-1/3">
                 <img
-                    src="https://i.scdn.co/image/ab67616d00001e0206d6ca0ec5edd42245e72ea3"
+                    src={currentTrack.image_url}
                     alt="Song Cover"
                     className="w-14 h-14 rounded"
                 />
                 <div>
-                    <div className="text-sm font-semibold truncate">Tình Ca Tình Ta</div>
-                    <div className="text-xs text-gray-400">kis</div>
+                    <div className="text-sm font-semibold truncate">{currentTrack.title}</div>
+                    <div className="text-xs text-gray-400">{currentTrack.listen}</div>
                 </div>
             </div>
 

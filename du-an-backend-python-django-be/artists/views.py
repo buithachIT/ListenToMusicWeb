@@ -4,12 +4,8 @@ from .serializers import ArtistSerializer
 from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
-<<<<<<< HEAD
-
-=======
 from .models import Artists
 from tracks.models import Tracks
->>>>>>> bcd161744d1fcd440b67199d4c12899411df4d0d
 class CreateArtistView(APIView):
     def post(self, request):
         serializer = ArtistSerializer(data=request.data)
@@ -23,9 +19,6 @@ class CreateArtistView(APIView):
         return Response({
             "message": serializer.errors,
             "status": status.HTTP_400_BAD_REQUEST
-<<<<<<< HEAD
-        }, status=status.HTTP_400_BAD_REQUEST)
-=======
         }, status=status.HTTP_400_BAD_REQUEST)
 class DeleteArtistView(APIView):
     def delete(self, request, artist_id):
@@ -54,4 +47,3 @@ class ArtistUpdateView(APIView):
             serializer.save()
             return Response({"message": "Cập nhật role thành công."})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
->>>>>>> bcd161744d1fcd440b67199d4c12899411df4d0d

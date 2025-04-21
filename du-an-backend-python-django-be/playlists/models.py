@@ -1,8 +1,4 @@
 from django.db import models
-<<<<<<< HEAD
-
-# Create your models here.
-=======
 from users.models import Users
 class Playlists(models.Model):
     playlist_id = models.AutoField(primary_key=True)
@@ -15,4 +11,3 @@ class Playlists(models.Model):
     class Meta:
         managed = False
         db_table = 'playlists'
->>>>>>> bcd161744d1fcd440b67199d4c12899411df4d0d

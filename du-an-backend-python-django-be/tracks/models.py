@@ -1,8 +1,4 @@
 from django.db import models
-<<<<<<< HEAD
-
-# Create your models here.
-=======
 from albums.models import Albums
 from artists.models import Artists
 class Tracks(models.Model):
@@ -15,7 +11,7 @@ class Tracks(models.Model):
     image_url = models.TextField(blank=True, null=True)
     release_date = models.DateField(blank=True, null=True)
     namemp3 = models.CharField(max_length=200)
+    listen = models.IntegerField(blank=True, null=True)
     class Meta:
         managed = False
         db_table = 'tracks'
->>>>>>> bcd161744d1fcd440b67199d4c12899411df4d0d

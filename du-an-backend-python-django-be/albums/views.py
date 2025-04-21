@@ -1,8 +1,4 @@
 from django.shortcuts import render
-<<<<<<< HEAD
-
-# Create your views here.
-=======
 from rest_framework.views import APIView
 from rest_framework import status, generics
 from rest_framework.response import Response
@@ -43,4 +39,3 @@ def GetAlbumbyAritstView(request, artist_id):
     albums = Albums.objects.filter(artist_id=artist_id)
     serializer = AlbumSerializer(albums, many=True)
     return Response(serializer.data)
->>>>>>> bcd161744d1fcd440b67199d4c12899411df4d0d

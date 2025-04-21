@@ -16,6 +16,7 @@ import HomePage from './pages/client/home.tsx';
 import LoginPage from './pages/client/auth/login.tsx';
 import RegisterPage from './pages/client/auth/register.tsx';
 import LayoutAdmin from './components/layout/admin/layout.admin.tsx';
+import { PlayerProvider } from './components/context/player.context.tsx';
 
 const router = createBrowserRouter([
   {
@@ -61,11 +62,14 @@ createRoot(document.getElementById('root')!).render(
 
   <StrictMode>
     <App>
-      <AppProvider>
+      <PlayerProvider>
         <ConfigProvider >
-          <RouterProvider router={router} />
+          <AppProvider>
+            <RouterProvider router={router} />
+          </AppProvider>
         </ConfigProvider>
-      </AppProvider>
+      </PlayerProvider>
+
     </App>
   </StrictMode>,
 )

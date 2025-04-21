@@ -35,3 +35,13 @@ POST:	/tracks/create/ 	tạo mới bài hát
 DELETE: /tracks/delete/1/	xóa bài hát (1 là biến id)
 GET: 	/tracks/getbyartist/1/ 	lấy danh sách bài hát theo nghệ sĩ (1 là biến id của artists)
 GET: 	/tracks/getbyalbum/1/	lấy danh sách bài hát theo album (1 là biến id của albums)
+GET:    /track/list/            lấy danh sách tất cả bài hát
+GET:    /track/toptrack/        lây danh sách tất cả bài hát theo thứ tự lượt nghe giảm dần
+GET:    /track/top10track/      lấy danh sách 10 bài hát nhiều lượt nghe nhất
+GET:    /track/artist-top/1/    lấy danh sách bài hát theo lượt nghe giảm dần của nghệ sĩ(1 là biến id nghệ sĩ)
+
+playlist
+
+
+
+playlistdetail

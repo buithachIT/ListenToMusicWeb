@@ -12,16 +12,16 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Users
-        fields = ['user_name', 'passwordhash', 'fullname', 'birthday', 'email', 'phone', 'image_user', 'role_id']
+        fields = ['user_name', 'password', 'fullname', 'birthday', 'email', 'phone', 'image_user', 'role_id']
         extra_kwargs = {
-            'passwordhash': {'write_only': True}
+            'password': {'write_only': True}
         }
     
     def create(self, validated_data):
         # Lấy role_id nếu có, ngược lại mặc định là 2
         role_id = validated_data.pop('role_id', 2)
         # Mã hóa mật khẩu trước khi lưu
-        validated_data['passwordhash'] = make_password(validated_data['passwordhash'])
+        validated_data['password'] = make_password(validated_data['password'])
         # Lấy instance của Roles dựa trên role_id
         try:
             role_instance = Roles.objects.get(pk=role_id)
@@ -41,11 +41,14 @@ class LoginSerializer(serializers.Serializer):
 
         try:
             user = Users.objects.get(user_name=user_name)
-        except Users.DoesNotExist:
-            raise serializers.ValidationError("Người dùng không tồn tại.")
+        except Users.DoesNotExist:  
+            raise serializers.ValidationError("Tài khoản không tồn tại.")
 
-        if not check_password(password, user.passwordhash):
+        if not check_password(password, user.password):
             raise serializers.ValidationError("Mật khẩu không đúng.")
+
+        if not user.is_active:
+            raise serializers.ValidationError("Tài khoản đã bị vô hiệu hóa.")
 
         data['user'] = user
         return data

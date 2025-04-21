@@ -15,7 +15,7 @@ export const registerAPI = (user_name: string, fullname: string, phone: string, 
 //Fetch account
 export const fetchAccountAPI = () => {
     const urlBackend = '/users/profile/';
-    return axios.get<IBackendRes<IRegister>>(urlBackend);
+    return axios.get<IBackendRes<IFetchAccount>>(urlBackend);
 };
 
 //Get music

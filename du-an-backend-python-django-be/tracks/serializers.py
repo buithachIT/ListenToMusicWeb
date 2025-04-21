@@ -10,7 +10,7 @@ class TrackSerializer(serializers.ModelSerializer):
         model = Tracks
         fields = [
             'track_id', 'title', 'album_id', 'artist_id', 'is_copyright',
-            'price', 'image_url', 'release_date','namemp3'
+            'price', 'image_url', 'release_date','namemp3','listen'
         ]
 
     def create(self, validated_data):

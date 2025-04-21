@@ -1,8 +1,4 @@
 from django.shortcuts import render
-<<<<<<< HEAD
-
-# Create your views here.
-=======
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -10,6 +6,8 @@ from .serializers import TrackSerializer
 from .models import Tracks
 from albums.models import Albums,Artists
 from rest_framework.decorators import api_view
+from rest_framework.permissions import AllowAny 
+
 
 class CreateTrackView(APIView):
     def post(self, request):
@@ -50,4 +48,41 @@ def GetTrackbyArtist(request, artist_id):
     track = Tracks.objects.filter(artist_id=artist_id)
     serializer = TrackSerializer(track, many=True)
     return Response(serializer.data)
->>>>>>> bcd161744d1fcd440b67199d4c12899411df4d0d
+
+#Lấy ra danh sách người dùng   
+class ListTrackView(APIView):
+    permission_classes = [AllowAny] 
+    def get(self, request):
+        tracks = Tracks.objects.all()
+        serializer = TrackSerializer(tracks, many=True)
+        return Response({"data": serializer.data, "message": "Lấy danh sách bài hát thành công!"}, status=status.HTTP_200_OK)
+
+class ListTrackTopView(APIView):
+    permission_classes = [AllowAny] 
+    def get(self, request):
+        tracks = Tracks.objects.all().order_by('-listen')  # <-- Sắp xếp giảm dần theo listen
+        serializer = TrackSerializer(tracks, many=True)
+        return Response({
+            "data": serializer.data,
+            "message": "Lấy danh sách bài hát thành công!"
+        }, status=status.HTTP_200_OK)
+    
+class Top10TrackView(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request):
+        tracks = Tracks.objects.all().order_by('-listen')[:10]
+        serializer = TrackSerializer(tracks, many=True)
+        return Response({
+            "data": serializer.data,
+            "message": "Lấy top 10 bài hát có lượt nghe cao nhất thành công!"
+        }, status=status.HTTP_200_OK)
+    
+class TracksByArtistView(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request, artist_id):
+        tracks = Tracks.objects.filter(artist_id=artist_id).order_by('-listen')
+        serializer = TrackSerializer(tracks, many=True)
+        return Response({
+            "data": serializer.data,
+            "message": f"Lấy danh sách bài hát theo artist_id={artist_id} thành công!"
+        }, status=status.HTTP_200_OK)
