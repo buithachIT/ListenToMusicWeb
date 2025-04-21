@@ -18,13 +18,6 @@ const Navbar = () => {
     }
     let items = [
         {
-            label: <label
-                style={{ cursor: 'pointer' }}
-                onClick={() => setOpenManageAccount(true)}
-            >Quản lý tài khoản</label>,
-            key: 'account',
-        },
-        {
             label: <Link to="/history">Lịch sử mua hàng</Link>,
             key: 'history',
         },

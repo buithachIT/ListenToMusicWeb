@@ -21,6 +21,7 @@ class RegisterUserView(APIView):
 # Sự kiện đăng nhập người dùng    
 from .serializers import LoginSerializer
 class LoginView(generics.GenericAPIView):
+    permission_classes = [AllowAny]
     serializer_class = LoginSerializer
 
     def post(self, request, *args, **kwargs):
@@ -61,7 +62,7 @@ class LoginView(generics.GenericAPIView):
                 secure=True,               # Trong môi trường dev có thể để False
                 samesite='Lax',
                 max_age=7 * 24 * 60 * 60,  # 7 ngày
-                path='/api/token/refresh/' # Chỉ gửi cookie khi gọi đúng route
+                path='/' 
             )
             return response
 
@@ -75,19 +76,36 @@ class RefreshTokenView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        refresh_token = request.data.get('refresh_token')
+        refresh_token = request.COOKIES.get('refresh_token')  # ✅ lấy từ cookie
+
+        if not refresh_token:
+            return Response({'error': 'No refresh token in cookie'}, status=status.HTTP_401_UNAUTHORIZED)
+
         try:
             token = RefreshToken(refresh_token)
             access_token = str(token.access_token)
 
-            # Optional: cập nhật access token trong DB
             user = Users.objects.get(id=token['id'])
             user.accesstoken = access_token
             user.save()
 
-            return Response({'access_token': access_token})
-        except Exception as e:
-            return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+            response = Response({'access_token': access_token})
+
+            # ✅ set lại cookie refresh_token giống lúc login
+            response.set_cookie(
+                key='refresh_token',
+                value=refresh_token,
+                httponly=True,
+                secure=True,
+                samesite='Lax',
+                max_age=7 * 24 * 60 * 60,
+                path='/'
+            )
+
+            return response
+
+        except Exception:
+            return Response({'error': 'Invalid refresh token'}, status=status.HTTP_400_BAD_REQUEST)
 
 class UpdateUserView(APIView):
     def put(self, request, pk):

@@ -45,7 +45,6 @@ const router = createBrowserRouter([
       <ProtectedRoute>
         <div>Checkout Page</div>
       </ProtectedRoute>
-
     )
   },
   {
@@ -69,7 +68,6 @@ createRoot(document.getElementById('root')!).render(
           </AppProvider>
         </ConfigProvider>
       </PlayerProvider>
-
     </App>
   </StrictMode>,
 )

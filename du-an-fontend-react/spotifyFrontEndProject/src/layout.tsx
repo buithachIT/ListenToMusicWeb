@@ -7,8 +7,6 @@ import { PacmanLoader } from "react-spinners";
 import HomePage from "./pages/client/home";
 import PlayerBar from "./components/layout/playbar.bottom";
 
-
-
 function Layout() {
   const { setUser, isAppLoading, setIsAppLoading, setIsAuthenticated } = useCurrentApp();
   useEffect(() => {
@@ -38,7 +36,7 @@ function Layout() {
           </div>
 
           {/* Player bar */}
-          <PlayerBar />
+
 
         </div >
         :
@@ -49,6 +47,7 @@ function Layout() {
           <PacmanLoader
             size={30} /></div>
       }
+      <PlayerBar />
     </>
   )
 }

@@ -11,5 +11,4 @@ urlpatterns = [
     path('getuserbyid/<int:user_id>/', GetUserbyIdView, name='usersbyid'),
     path('token/<str:accesstoken>/', GetUserbyTokenView, name='usersbyToken'),
     path('profile/', UserProfileView.as_view(), name='user-profile'),
-
 ]
