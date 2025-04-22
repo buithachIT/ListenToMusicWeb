@@ -47,11 +47,19 @@ declare global {
     interface ITrack{
         track_id: number;
         title: string;
-        is_copyright : string;
+        is_copyright : number;
         price : string;
         image_url : string;
         release_date : string;
         namemp3: string;
         listen: number;
+    }
+    interface IArtist {
+        artist_id: number;
+        name: string;
+        popularity_score: number;
+        gener: string;
+        follower: number;
+        avatar: string;
     }
 }

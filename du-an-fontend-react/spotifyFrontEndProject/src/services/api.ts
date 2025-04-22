@@ -18,8 +18,13 @@ export const fetchAccountAPI = () => {
     return axios.get<IBackendRes<IFetchAccount>>(urlBackend);
 };
 
-//Get music
+//Get top music
 export const getTrackAPI = () => {
-    const urlBackend = '/tracks/list/';
+    const urlBackend = '/tracks/toptrack/';
     return axios.get<IBackendRes<ITrack[]>>(urlBackend);
+}
+//Get top singer
+export const getTopArtistAPI = () => {
+    const urlBackend = '/artists/list/';
+    return axios.get<IBackendRes<IArtist[]>>(urlBackend);
 }

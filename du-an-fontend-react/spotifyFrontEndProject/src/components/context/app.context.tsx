@@ -23,22 +23,26 @@ export const AppProvider = (props: TProps) => {
     const [isAppLoading, setIsAppLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        const fetchAccount = async () => {
+        const init = async () => {
+            const token = localStorage.getItem("access_token");
+
+            if (!token) {
+                setIsAppLoading(false);
+                return;
+            }
+
             const res = await fetchAccountAPI();
             if (res.data) {
-                console.log("Check res in context", res.data.user);
                 setUser(res.data.user);
                 setIsAuthenticated(true);
             }
-            else {
-                console.log("Lỗi fetch", res.message)
-            }
+            setIsAppLoading(false);
 
-            setIsAppLoading(false)
-        }
+        };
 
-        fetchAccount();
-    }, [])
+        init();
+    }, []);
+
     console.log("Check user in context>>", user)
     console.log("AppProvider mounted", isAuthenticated, user);
 
