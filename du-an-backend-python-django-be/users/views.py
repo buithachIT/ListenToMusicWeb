@@ -168,5 +168,6 @@ class UserProfileView(APIView):
             "fullname":user.fullname,
             "user_name": user.user_name,
             "email": user.email,
-            "role_id": user.role_id,}}
+            "role_id": user.role_id,
+            "is_superuser": user.is_superuser}}
         })

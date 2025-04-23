@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+
 import { useCurrentApp } from "../context/app.context";
 import { App, Avatar, Divider, Drawer, Dropdown, Space } from "antd";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,8 +6,6 @@ import { Link, useNavigate } from "react-router-dom";
 const Navbar = () => {
     const { isAuthenticated, setIsAuthenticated, user, setUser, setOpenModalPremium } = useCurrentApp();
     const navigate = useNavigate();
-    const [openDrawer, setOpenDrawer] = useState(false);
-    const [openManageAccount, setOpenManageAccount] = useState<boolean>(false);
     const { message } = App.useApp();
 
     const handleLogout = () => {
@@ -42,7 +40,7 @@ const Navbar = () => {
         <nav className="flex justify-between items-center px-4 py-3 bg-black text-white">
             {/* Left section */}
             <div className="flex items-center space-x-4">
-                {/* Spotify logo */}
+
                 <img
                     src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
                     alt="Spotify"
@@ -85,30 +83,20 @@ const Navbar = () => {
                 </div>
 
                 {/* Inbox icon */}
-                <div className="ml-2">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 text-white"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0l-8 8-8-8"
-                        />
-                    </svg>
-                </div>
+
             </div>
 
             {/* Right section */}
             <div className="flex items-center space-x-4">
-                <button className="bg-white text-black text-sm font-semibold px-4 py-1 rounded-full" onClick={() => { setOpenModalPremium(true) }}>
-                    Explore Premium
-                </button>
+                {user?.is_superuser == 1
+                    ?
+                    <div className="text-2xl font-bold text-green-600">Premium  <i className="fa-solid fa-crown text-yellow-400 drop-shadow-md w-10"></i></div>
+                    :
 
+                    < button className="bg-white text-black text-sm font-semibold px-4 py-1 rounded-full" onClick={() => { setOpenModalPremium(true) }}>
+                        Explore Premium
+                    </button>
+                }
                 <div className="flex items-center space-x-1 text-sm text-gray-200 cursor-pointer">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -121,7 +109,6 @@ const Navbar = () => {
                     </svg>
                     <span>Install App</span>
                 </div>
-
                 <div className="relative cursor-pointer">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
