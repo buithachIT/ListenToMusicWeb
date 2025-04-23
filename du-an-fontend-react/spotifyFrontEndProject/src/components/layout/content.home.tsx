@@ -8,7 +8,7 @@ import { Button, message, Modal, Space } from 'antd';
 import { useNavigate } from 'react-router-dom';
 const HomeContent = () => {
 
-    const [openModalPremium, setOpenModelPremium] = useState(false);
+
     const navigate = useNavigate();
 
 
@@ -41,11 +41,12 @@ const HomeContent = () => {
     }
 
 
-    const { setShowNowPlayingSideBar, user } = useCurrentApp();
+    const { setShowNowPlayingSideBar, user, openModalPremium, setOpenModalPremium } = useCurrentApp();
     const { setCurrentTrack, setIsPlaying, setCurrentIndex, setPlayList } = usePlayer();
+    console.log("Check premium>>", user?.is_superuser)
     const handleClickTrack = (track: ITrack, index: number) => {
         if (track.is_copyright && !user?.is_superuser == 1) {
-            setOpenModelPremium(true);
+            setOpenModalPremium(true);
             return;
         }
         setPlayList(listTrack);
@@ -68,12 +69,11 @@ const HomeContent = () => {
 
     //handle open/close Premium modal
     const handleCancelPremium = () => {
-        setOpenModelPremium(false);
+        setOpenModalPremium(false);
     }
     const handleOkPremium = () => {
         navigate('/premium-checkout')
     }
-
 
     return (
         <div className='bg-gradient-to-b from-[#191919] to-[#000] pt-5 pl-6'>
@@ -146,7 +146,6 @@ const HomeContent = () => {
                         < div className="grid grid-cols-6 mt-5 gap-4" >
                             {listArtist.map((item) => {
                                 return (
-
                                     <div key={item.artist_id} className="cursor-pointer hover:bg-[#1a1a1a] p-2 rounded mr-5">
                                         <img src={item.avatar} className="rounded-full mb-2" />
                                         <h3 className="text-sm font-semibold">{item.name}</h3>
@@ -162,21 +161,45 @@ const HomeContent = () => {
             //Modal Premium
             <Modal
                 open={openModalPremium}
-                title="Title"
+                title={null}
+                width={800}
                 onCancel={handleCancelPremium}
-                footer={(_, { CancelBtn }) => (
-                    <>
-                        <Button onClick={handleOkPremium}>Khám phá spotyfi Premium ngay!</Button>
-                        <CancelBtn />
-                    </>
-                )}
+                footer={[
+                    <Button key="checkout" type="primary" onClick={handleOkPremium}>
+                        Khám phá Spotify Premium ngay!
+                    </Button>,
+                    <Button key="cancel" onClick={handleCancelPremium}>
+                        Hủy
+                    </Button>,
+                ]}
             >
-                <p>Some contents...</p>
-                <p>Some contents...</p>
-                <p>Some contents...</p>
-                <p>Some contents...</p>
-                <p>Some contents...</p>
+                {/* Section 1 - Header Premium */}
+                <div className="bg-gradient-to-r from-purple-700 via-pink-600 to-indigo-700 text-white p-6 rounded text-3xl mb-4 font-bold">Bài nhạc này thuộc Premium!</div>
+                <div className="bg-gradient-to-r from-purple-700 via-pink-600 to-indigo-700 text-white p-6 rounded">
+                    <h2 className="text-2xl font-bold mb-2">59.000 ₫ cho 4 tháng dùng gói Premium</h2>
+                    <p className="mb-4">Tận hưởng trải nghiệm nghe nhạc không quảng cáo, không cần kết nối mạng và nhiều lợi ích khác. Hủy bất cứ lúc nào.</p>
+                    <div className="flex gap-4 mb-4">
+                        <Button type="default" className="font-bold">
+                            Dùng thử 4 tháng với giá 59.000 ₫
+                        </Button>
+                    </div>
+                    <p className="text-xs text-gray-200">
+                        Chỉ áp dụng cho gói Premium Individual. Ưu đãi kết thúc vào ngày 19 tháng 5, 2025.
+                        <br />
+                        <a href="#" className="underline text-white">Có áp dụng điều khoản</a>
+                    </p>
+                </div>
+                {/* Section 2 - Payment Methods */}
+                <div className="bg-white p-6 rounded-b">
+                    <h3 className="text-lg font-semibold mb-2">Gói hợp túi tiền cho mọi hoàn cảnh</h3>
+                    <p className="text-gray-600 mb-4">Chọn một gói Premium để nghe nhạc không quảng cáo thỏa thích trên mọi thiết bị. Hủy bất cứ lúc nào.</p>
+                    <div className="flex items-center gap-4">
+                        <p>Thanh toán online cực nhanh chóng với</p>
+                        <img src="/momo-2.svg" alt="momo" width={70} height={32} />
+                    </div>
+                </div>
             </Modal>
+
         </div>
 
     );

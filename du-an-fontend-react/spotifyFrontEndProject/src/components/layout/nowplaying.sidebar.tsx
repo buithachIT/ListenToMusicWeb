@@ -18,7 +18,7 @@ const NowPlayingSidebar = () => {
 
                 <img src={currentTrack.image_url} className="w-full rounded mb-4" />
                 <h2 className="text-lg font-bold">{currentTrack.title}</h2>
-                <p className="text-sm text-gray-400">{currentTrack.artist}</p>
+                <p className="text-sm text-gray-400">{currentTrack.is_copyright}</p>
             </div>
         </aside>
     );

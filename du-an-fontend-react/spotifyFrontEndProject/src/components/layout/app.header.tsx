@@ -4,7 +4,7 @@ import { App, Avatar, Divider, Drawer, Dropdown, Space } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-    const { isAuthenticated, setIsAuthenticated, user, setUser } = useCurrentApp();
+    const { isAuthenticated, setIsAuthenticated, user, setUser, setOpenModalPremium } = useCurrentApp();
     const navigate = useNavigate();
     const [openDrawer, setOpenDrawer] = useState(false);
     const [openManageAccount, setOpenManageAccount] = useState<boolean>(false);
@@ -105,7 +105,7 @@ const Navbar = () => {
 
             {/* Right section */}
             <div className="flex items-center space-x-4">
-                <button className="bg-white text-black text-sm font-semibold px-4 py-1 rounded-full">
+                <button className="bg-white text-black text-sm font-semibold px-4 py-1 rounded-full" onClick={() => { setOpenModalPremium(true) }}>
                     Explore Premium
                 </button>
 

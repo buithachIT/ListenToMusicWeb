@@ -11,6 +11,8 @@ interface IAppContext {
     setIsAppLoading: (v: boolean) => void;
     showNowPlayingSideBar: boolean;
     setShowNowPlayingSideBar: (v: boolean) => void;
+    openModalPremium: boolean;
+    setOpenModalPremium: (v: boolean) => void;
 }
 
 const CurrentAppContext = createContext<IAppContext | null>(null);
@@ -24,6 +26,7 @@ export const AppProvider = (props: TProps) => {
     const [user, setUser] = useState<IUser | null>(null);
     const [isAppLoading, setIsAppLoading] = useState<boolean>(true);
     const [showNowPlayingSideBar, setShowNowPlayingSideBar] = useState(true);
+    const [openModalPremium, setOpenModalPremium] = useState(false);
 
     useEffect(() => {
         const init = async () => {
@@ -54,7 +57,7 @@ export const AppProvider = (props: TProps) => {
             {isAppLoading === false ?
                 <CurrentAppContext.Provider value={{
                     isAuthenticated, user, setIsAuthenticated, setUser,
-                    isAppLoading, setIsAppLoading, showNowPlayingSideBar, setShowNowPlayingSideBar
+                    isAppLoading, setIsAppLoading, showNowPlayingSideBar, setShowNowPlayingSideBar, openModalPremium, setOpenModalPremium
                 }}>
                     {props.children}
                 </CurrentAppContext.Provider>
