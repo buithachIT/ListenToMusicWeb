@@ -9,6 +9,8 @@ interface IAppContext {
     user: IUser | null;
     isAppLoading: boolean;
     setIsAppLoading: (v: boolean) => void;
+    showNowPlayingSideBar: boolean;
+    setShowNowPlayingSideBar: (v: boolean) => void;
 }
 
 const CurrentAppContext = createContext<IAppContext | null>(null);
@@ -21,6 +23,7 @@ export const AppProvider = (props: TProps) => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [user, setUser] = useState<IUser | null>(null);
     const [isAppLoading, setIsAppLoading] = useState<boolean>(true);
+    const [showNowPlayingSideBar, setShowNowPlayingSideBar] = useState(true);
 
     useEffect(() => {
         const init = async () => {
@@ -51,7 +54,7 @@ export const AppProvider = (props: TProps) => {
             {isAppLoading === false ?
                 <CurrentAppContext.Provider value={{
                     isAuthenticated, user, setIsAuthenticated, setUser,
-                    isAppLoading, setIsAppLoading
+                    isAppLoading, setIsAppLoading, showNowPlayingSideBar, setShowNowPlayingSideBar
                 }}>
                     {props.children}
                 </CurrentAppContext.Provider>

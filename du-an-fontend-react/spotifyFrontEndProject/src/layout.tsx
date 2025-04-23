@@ -34,10 +34,6 @@ function Layout() {
             <HomePage />
 
           </div>
-
-          {/* Player bar */}
-
-
         </div >
         :
         <div style={{

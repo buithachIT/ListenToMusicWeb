@@ -25,6 +25,7 @@ declare global {
             role_id: string;
             user_id: string;
             user_name: number;
+            is_superuser: number;
         }
     }
     interface ILogin{
@@ -34,6 +35,7 @@ declare global {
             role_id: string;
             user_id: string;
             username: string;
+            is_superuser: number;
         }
     }
     interface IRegister{
