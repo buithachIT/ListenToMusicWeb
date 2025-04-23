@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'albums',
     'oders',
     'playlists',
+    'playlist_detail',
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',

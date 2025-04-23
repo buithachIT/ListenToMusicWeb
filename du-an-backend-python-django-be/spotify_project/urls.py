@@ -29,6 +29,8 @@ urlpatterns = [
     path('artists/', include('artists.urls')), 
     path('albums/', include('albums.urls')), 
     path('tracks/', include('tracks.urls')), 
+    path('playlists/', include('playlists.urls')), 
+    path('playlist_detail/', include('playlist_detail.urls')), 
 
     
     path('addtrack/',CreateTrackView.as_view(),name='track'),

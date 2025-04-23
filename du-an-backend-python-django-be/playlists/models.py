@@ -5,7 +5,6 @@ class Playlists(models.Model):
     user = models.ForeignKey('users.Users', models.DO_NOTHING, blank=True, null=True)
     name = models.CharField(max_length=255)
     ispublic = models.IntegerField(blank=True, null=True)
-    track = models.IntegerField(blank=True, null=True)
     releasedate = models.DateField(blank=True, null=True)
 
     class Meta:
