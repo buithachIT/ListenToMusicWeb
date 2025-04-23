@@ -52,8 +52,8 @@ instance.interceptors.response.use(
         return instance(originalRequest);
       } catch (refreshErr) {
         console.error("❌ Refresh token failed, logging out...");
-        localStorage.removeItem("access_token"); // ✅ Xoá token lỗi
-        window.location.href = "/login"; // ✅ Chuyển về login
+        
+        
         return Promise.reject(refreshErr); // ❌ Không gọi lại nữa
       }
     }

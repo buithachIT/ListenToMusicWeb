@@ -7,6 +7,7 @@ class Artists(models.Model):
     name = models.CharField(max_length=255)
     gener = models.CharField(max_length=255, blank=True, null=True)
     follower = models.IntegerField(blank=True, null=True)
+    avatar = models.CharField(max_length=255)
 
     class Meta:
         managed = False

@@ -76,22 +76,24 @@ class RefreshTokenView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        refresh_token = request.COOKIES.get('refresh_token')  # ✅ lấy từ cookie
+        refresh_token = request.COOKIES.get('refresh_token')
+        print("🔎 Refresh token nhận được:", refresh_token)
 
         if not refresh_token:
-            return Response({'error': 'No refresh token in cookie'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'error': 'No refresh token'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             token = RefreshToken(refresh_token)
+            print("✅ Token giải mã OK")
+            print("➡️ Payload:", token.payload)
+
             access_token = str(token.access_token)
 
-            user = Users.objects.get(id=token['id'])
+            user = Users.objects.get(id=token['user_id'])
             user.accesstoken = access_token
             user.save()
 
-            response = Response({'access_token': access_token})
-
-            # ✅ set lại cookie refresh_token giống lúc login
+            response = Response({'access_token': access_token}, status=status.HTTP_200_OK)
             response.set_cookie(
                 key='refresh_token',
                 value=refresh_token,
@@ -101,11 +103,11 @@ class RefreshTokenView(APIView):
                 max_age=7 * 24 * 60 * 60,
                 path='/'
             )
-
             return response
 
-        except Exception:
-            return Response({'error': 'Invalid refresh token'}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            print("❌ Token error:", str(e))  # Log chính xác lỗi
+            return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
 
 class UpdateUserView(APIView):
     def put(self, request, pk):

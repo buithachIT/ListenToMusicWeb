@@ -70,7 +70,7 @@ const HomeContent = () => {
                                 {/* ✅ Premium badge */}
                                 {item.is_copyright && (
                                     <span className="absolute top-1 left-1 text-black text-xs font-bold px-2 py-0.5 rounded-full shadow-lg z-10">
-                                        <i className="fa-solid fa-crown fa-2x text-yellow-400"></i>
+                                        <i className="fa-solid fa-crown text-yellow-400 drop-shadow-md"></i>
                                     </span>
                                 )}
 

@@ -39,6 +39,7 @@ class DeleteTrackView(APIView):
                             status=status.HTTP_404_NOT_FOUND)
 @api_view(['GET'])
 def GetTrackbyAlbums(request, album_id):
+    
     track = Tracks.objects.filter(album_id=album_id)
     serializer = TrackSerializer(track, many=True)
     return Response(serializer.data)

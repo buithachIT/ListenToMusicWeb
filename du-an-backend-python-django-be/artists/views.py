@@ -35,8 +35,11 @@ class ArtistListView(APIView):
     def get(self, request):
         roles = Artists.objects.all()
         serializer = ArtistSerializer(roles, many=True)
-        return Response(serializer.data)
-
+        return Response({
+                "message": "HEHE!",
+                "data": serializer.data,
+                "status": status.HTTP_201_CREATED
+            }, status=status.HTTP_201_CREATED)
 # Sửa thông tin Role
 from django.shortcuts import get_object_or_404
 class ArtistUpdateView(APIView):

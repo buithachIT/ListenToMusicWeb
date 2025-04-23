@@ -5,4 +5,4 @@ from .models import Artists
 class ArtistSerializer(serializers.ModelSerializer):
     class Meta:
         model = Artists
-        fields = ['artist_id', 'name', 'popularity_score', 'gener', 'follower']
+        fields = ['artist_id', 'name', 'popularity_score', 'gener', 'follower','avatar']
