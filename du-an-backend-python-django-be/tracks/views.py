@@ -13,8 +13,10 @@ class CreateTrackView(APIView):
     def post(self, request):
         serializer = TrackSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response({"message": "Thêm bài hát thành công!", "data": serializer.data,"status": status.HTTP_201_CREATED}, status=status.HTTP_201_CREATED)
+            track = serializer.save()
+            response_serializer = TrackSerializer(track)
+
+            return Response({"message": "Thêm bài hát thành công!", "data": response_serializer.data,"status": status.HTTP_201_CREATED}, status=status.HTTP_201_CREATED)
         return Response({"message": serializer.errors, "status": status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
 
 class DeleteTrackView(APIView):

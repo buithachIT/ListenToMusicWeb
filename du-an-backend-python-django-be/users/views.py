@@ -48,6 +48,7 @@ class LoginView(generics.GenericAPIView):
                         "user_name": user.user_name,
                         "email": user.email,
                         "role_id": user.role_id,
+                        "is_superuser": user.is_superuser,
                     }
                 },
                 "message": "Đăng nhập thành công!",

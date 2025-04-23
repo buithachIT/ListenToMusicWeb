@@ -4,10 +4,14 @@ from .models import Users, Playlists
 
 class PlaylistSerializer(serializers.ModelSerializer):
     playlist_id = serializers.IntegerField(write_only=True, required=False, allow_null=True)
+    user_id = serializers.PrimaryKeyRelatedField(
+        source='user',  # Trỏ đến trường 'user' trong model
+        queryset=Playlists._meta.get_field('user').related_model.objects.all()
+    )
 
     class Meta:
         model = Playlists
-        fields = ['playlist', 'user_id', 'name', 'ispublic', 'track_id', 'releasedate']
+        fields = ['playlist_id', 'user_id', 'name', 'ispublic', 'releasedate']
 
     def create(self, validated_data):
         playlist_id = validated_data.pop('playlist_id', None)

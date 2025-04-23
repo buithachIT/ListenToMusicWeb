@@ -1,15 +1,16 @@
 #Thêm bài hát 
 from rest_framework import serializers
 from .models import Tracks, Albums, Artists
-
+from artists.serializers import ArtistSerializer
 class TrackSerializer(serializers.ModelSerializer):
     album_id = serializers.IntegerField(write_only=True, required=False, allow_null=True)
     artist_id = serializers.IntegerField(write_only=True, required=False, allow_null=True)
+    artist = ArtistSerializer(read_only=True)
 
     class Meta:
         model = Tracks
         fields = [
-            'track_id', 'title', 'album_id', 'artist_id', 'is_copyright',
+            'track_id', 'title', 'album_id', 'artist_id','artist', 'is_copyright',
             'price', 'image_url', 'release_date','namemp3','listen'
         ]
 
