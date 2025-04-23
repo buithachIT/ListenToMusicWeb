@@ -142,14 +142,12 @@ const Navbar = () => {
                 {!isAuthenticated ?
                     <span onClick={() => navigate('/login')}> Tài Khoản</span>
                     :
-
                     <Dropdown menu={{ items }} trigger={['click']}>
                         <Space >
                             <Avatar src={urlAvatar} />
                             {user?.fullName}
                             <p>Xin chào, {user?.fullname}</p>
                         </Space>
-
                     </Dropdown>}
 
 

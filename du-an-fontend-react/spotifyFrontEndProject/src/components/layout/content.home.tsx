@@ -32,10 +32,12 @@ const HomeContent = () => {
     }
     console.log(listTrack)
 
-    const { setCurrentTrack, setIsPlaying } = usePlayer();
-    const handleClickTrack = (track: ITrack) => {
+    const { setCurrentTrack, setIsPlaying, setCurrentIndex, setPlayList } = usePlayer();
+    const handleClickTrack = (track: ITrack, index: number) => {
+        setPlayList(listTrack);
         setCurrentTrack(track);
-        setIsPlaying(true)
+        setIsPlaying(true);
+        setCurrentIndex(index);
     }
 
     return (
@@ -61,13 +63,13 @@ const HomeContent = () => {
                 </div>
                 <SimpleBar forceVisible="x" autoHide={false}>
                     <div className="flex gap-4 px-2">
-                        {listTrack.map((item) => (
+                        {listTrack.map((item, index) => (
                             <div
-                                onClick={() => handleClickTrack(item)}
+                                onClick={() => handleClickTrack(item, index)}
                                 key={item.track_id}
                                 className="relative flex-none w-40 cursor-pointer hover:bg-[#1a1a1a] p-2 rounded"
                             >
-                                {/* ✅ Premium badge */}
+                                {/* Premium badge */}
                                 {item.is_copyright && (
                                     <span className="absolute top-1 left-1 text-black text-xs font-bold px-2 py-0.5 rounded-full shadow-lg z-10">
                                         <i className="fa-solid fa-crown text-yellow-400 drop-shadow-md"></i>

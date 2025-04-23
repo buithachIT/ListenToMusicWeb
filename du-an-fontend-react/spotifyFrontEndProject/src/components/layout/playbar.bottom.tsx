@@ -1,13 +1,17 @@
-import { useEffect, useRef, useState } from 'react';
+import { useDebugValue, useEffect, useRef, useState } from 'react';
 import { usePlayer } from '../context/player.context';
 
 const PlayerBar = () => {
-    const { currentTrack, isPlaying, setIsPlaying } = usePlayer();
+    const { currentTrack, setCurrentTrack, isPlaying, setIsPlaying, currentIndex, setCurrentIndex, playlist, setPlayList } = usePlayer();
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const [isAudioReady, setIsAudioReady] = useState(false);
+    const [currentTime, setCurrentTime] = useState<number>(0);
+    const [volume, setVolume] = useState(1);
+    const [previousVolume, setPreviousVolume] = useState(1);
     useEffect(() => {
         setIsAudioReady(false);
     }, [currentTrack]);
+
     useEffect(() => {
         const audio = audioRef.current;
         if (!audio || !isAudioReady) return;
@@ -21,17 +25,55 @@ const PlayerBar = () => {
         }
     }, [isPlaying, isAudioReady]);
 
+    //Volume
+    useEffect(() => {
+        if (audioRef.current) {
+            audioRef.current.volume = volume;
+        }
+    }, [volume])
+
     if (!currentTrack) return (
         <div className="fixed bottom-0 left-0 w-full h-20 bg-zinc-900 flex items-center justify-center text-white text-sm italic">
             Chưa chọn bài hát nào
         </div>
     );
+
     const urlTrack = `${import.meta.env.VITE_BACKEND_URL}/media/music_file/${encodeURIComponent(currentTrack.namemp3)}`
 
+    //format duration
+    const formatTime = (seconds: number): string => {
+        const totalSeconds = Math.floor(seconds);
+        const minutes = Math.floor(totalSeconds / 60);
+        const remainingSeconds = totalSeconds % 60;
+        const paddedSeconds = remainingSeconds.toString().padStart(2, '0');
+        return `${minutes}:${paddedSeconds}`;
+    };
+
+    const handleNext = () => {
+        const nextIndex = currentIndex + 1;
+        if (nextIndex < playlist.length) {
+            setCurrentIndex(nextIndex);
+            setCurrentTrack(playlist[nextIndex]);
+            setIsPlaying(true);
+        }
+        else {
+            setIsPlaying(false);
+        }
+    }
+    const handlePrevious = () => {
+        const preIndex = currentIndex - 1;
+        if (preIndex < playlist.length) {
+            setCurrentIndex(preIndex);
+            setCurrentTrack(playlist[preIndex]);
+            setIsPlaying(true);
+        }
+    }
 
     return (
         <div className="fixed bottom-0 left-0 right-0 h-24 bg-black border-t border-gray-800 flex items-center justify-between px-6 z-50 text-white">
-            <audio ref={audioRef} src={urlTrack} onLoadedMetadata={() => setIsAudioReady(true)} />
+            <audio ref={audioRef} src={urlTrack} onLoadedMetadata={() => setIsAudioReady(true)} onTimeUpdate={() => {
+                setCurrentTime(audioRef.current?.currentTime);
+            }} onEnded={handleNext} onVolumeChange={volume} />
             {/* --- Left: Song Info --- */}
             <div className="flex items-center space-x-4 w-1/3">
                 <img
@@ -52,7 +94,7 @@ const PlayerBar = () => {
                     <button className="text-gray-400 hover:text-white">
                         <i className="fa fa-random" />
                     </button>
-                    <button className="text-gray-400 hover:text-white">
+                    <button className="text-gray-400 hover:text-white" onClick={handlePrevious}>
                         <i className="fa fa-step-backward" />
                     </button>
                     <button
@@ -62,7 +104,7 @@ const PlayerBar = () => {
                         <i className={`fa ${isPlaying ? 'fa-pause' : 'fa-play'}`} />
                     </button>
 
-                    <button className="text-gray-400 hover:text-white">
+                    <button className="text-gray-400 hover:text-white" onClick={handleNext}>
                         <i className="fa fa-step-forward" />
                     </button>
                     <button className="text-gray-400 hover:text-white">
@@ -70,22 +112,50 @@ const PlayerBar = () => {
                     </button>
                 </div>
                 <div className="flex items-center space-x-2 text-xs w-full mt-1">
-                    <span>0:00</span>
-                    <div className="h-1 bg-gray-600 rounded w-full">
-                        <div className="h-1 bg-white rounded w-1/3" />
-                    </div>
-                    <span>3:55</span>
+                    <span>{formatTime(currentTime)}</span>
+                    <input
+                        type="range"
+                        min={0}
+                        max={audioRef.current?.duration}
+                        value={currentTime}
+                        onChange={(e) => {
+                            const value = Number(e.target.value);
+                            setCurrentTime(value);
+                            if (audioRef.current) {
+                                audioRef.current.currentTime = value;
+                            }
+                        }}
+                        className="w-full h-1 accent-white"
+                    />
+                    <span>{formatTime(audioRef.current?.duration)}</span>
                 </div>
             </div>
 
             {/* --- Right: Extra Controls --- */}
             <div className="flex items-center space-x-4 justify-end w-1/3">
-                <button className="text-gray-400 hover:text-white">
-                    <i className="fa fa-volume-up" />
-                </button>
-                <div className="w-24 h-1 bg-gray-600 rounded">
-                    <div className="h-1 bg-white rounded w-2/3" />
+                <div className="relative group  flex">
+                    <button className="text-gray-400 mr-2" onClick={() => {
+                        if (volume > 0) {
+                            setPreviousVolume(volume);
+                            setVolume(0);               // Mute
+                        } else {
+                            setVolume(previousVolume); // Unmute
+                        }
+                    }}>
+                        <i className={`fa ${volume === 0 ? 'fa-volume-mute' : 'fa-volume-up'}`} />
+                    </button>
+                    {/* Slider volume  */}
+                    <input
+                        type="range"
+                        min={0}
+                        max={1}
+                        step={0.01}
+                        value={volume}
+                        onChange={(e) => setVolume(Number(e.target.value))}
+                        className="transition-all duration-200 h-1 mt-2.5 accent-amber-50"
+                    />
                 </div>
+
                 <button className="text-gray-400 hover:text-white">
                     <i className="fa fa-list" />
                 </button>
