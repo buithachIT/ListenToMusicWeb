@@ -27,6 +27,7 @@ declare global {
             id: string;
             user_name: number;
             is_superuser: number;
+            url_avatar: string;
         }
     }
     interface ILogin{

@@ -21,7 +21,7 @@ class Users(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     last_login = models.DateTimeField(default=timezone.now, blank=True, null=True)
-
+    url_avatar = models.CharField(unique=True, max_length=255)
     USERNAME_FIELD = 'user_name'
     REQUIRED_FIELDS = ['email'] 
 

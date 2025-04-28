@@ -40,6 +40,7 @@ const NowPlayingSidebar = () => {
             if (videoRef.current.requestFullscreen) {
                 videoRef.current.requestFullscreen();
                 setIsPlaying(false);
+                videoRef.current.muted = false;
             }
         }
     }
@@ -63,37 +64,9 @@ const NowPlayingSidebar = () => {
     const mv_url = `${import.meta.env.VITE_BACKEND_URL}/media/mv_file/${currentTrack.mv_url}`;
     return (
         <>
-            <Modal
-                title="Thêm vào playlist"
-                open={isOpenModalPlaylist}
-                onOk={() => { form.submit() }}
-                onCancel={() => { setIsOpenModalPlaylist(false); form.resetFields(); }}
-                afterOpenChange={(open) => {
-                    if (open && pendingTrackId !== null) {
-                        form.setFieldsValue({ track_id: pendingTrackId });
-                    }
-                }}
-            >
-                <Form form={form} onFinish={onFinish}>
-                    <Form.Item<FieldType> name="track_id" hidden>
-                        <Input />
-                    </Form.Item>
-
-                    <Form.Item<FieldType> name="playlist_id">
-                        <Radio.Group size="large">
-                            {albums?.map((item) => (
-                                <Radio.Button key={item.playlist_id} value={item.playlist_id}>
-                                    {item.name}
-                                </Radio.Button>
-                            ))}
-                        </Radio.Group>
-                    </Form.Item>
-                </Form>
-            </Modal>
-
             <SimpleBar className="w-[350px] max-h-screen p-4 bg-zinc-990 text-white border-l border-zinc-800 relative" autoHide={false}>
                 <aside >
-
+                    <div><i className="fa fa-angle-double-left bg-black bg-opacity-50 text-white rounded hover:bg-opacity-80 mb-3" onClick={() => { setShowNowPlayingSideBar(false) }}></i></div>
                     <div className="relative w-full h-[400px] rounded-lg overflow-hidden group">
                         <button
                             onClick={handleFullScreen}
@@ -120,7 +93,7 @@ const NowPlayingSidebar = () => {
                             />
                         )}
 
-                        {/* Overlay đen nhẹ */}
+                        {/* Overlay*/}
                         <div className="absolute inset-0 bg-black bg-opacity-40 z-20"></div>
 
                         {/* Thông tin bài hát */}
@@ -129,10 +102,7 @@ const NowPlayingSidebar = () => {
                             <div className="text-sm opacity-80">{currentTrack.artist.name}</div>
                         </div>
 
-                        {/* (Sau này Icon thêm vào playlist cũng nên để z-30 trở lên) */}
                     </div>
-
-
 
                     <div className="bg-zinc-900 flex mt-3 justify-center">
 
@@ -231,6 +201,33 @@ const NowPlayingSidebar = () => {
                     </div>
                 </aside>
             </SimpleBar >
+            <Modal
+                title="Thêm vào playlist"
+                open={isOpenModalPlaylist}
+                onOk={() => { form.submit() }}
+                onCancel={() => { setIsOpenModalPlaylist(false); form.resetFields(); }}
+                afterOpenChange={(open) => {
+                    if (open && pendingTrackId !== null) {
+                        form.setFieldsValue({ track_id: pendingTrackId });
+                    }
+                }}
+            >
+                <Form form={form} onFinish={onFinish}>
+                    <Form.Item<FieldType> name="track_id" hidden>
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item<FieldType> name="playlist_id">
+                        <Radio.Group size="large">
+                            {albums?.map((item) => (
+                                <Radio.Button key={item.playlist_id} value={item.playlist_id}>
+                                    {item.name}
+                                </Radio.Button>
+                            ))}
+                        </Radio.Group>
+                    </Form.Item>
+                </Form>
+            </Modal>
         </>
     );
 };
