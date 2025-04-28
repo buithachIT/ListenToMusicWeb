@@ -158,7 +158,7 @@ const HomeContent = () => {
                 </SimpleBar>
             </div>
 
-            //Modal Premium
+            {/* Model premium */}
             <Modal
                 open={openModalPremium}
                 title={null}

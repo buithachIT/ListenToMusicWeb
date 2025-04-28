@@ -43,7 +43,6 @@ export const AppProvider = (props: TProps) => {
                 setIsAuthenticated(true);
             }
             setIsAppLoading(false);
-
         };
 
         init();

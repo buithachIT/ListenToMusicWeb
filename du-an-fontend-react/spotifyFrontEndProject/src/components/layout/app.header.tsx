@@ -9,6 +9,7 @@ const Navbar = () => {
     const { message } = App.useApp();
 
     const handleLogout = () => {
+
         localStorage.removeItem("access_token");
         setIsAuthenticated(false);
         setUser(null);
@@ -90,7 +91,31 @@ const Navbar = () => {
             <div className="flex items-center space-x-4">
                 {user?.is_superuser == 1
                     ?
-                    <div className="text-2xl font-bold text-green-600">Premium  <i className="fa-solid fa-crown text-yellow-400 drop-shadow-md w-10"></i></div>
+                    <div><div className="relative inline-flex items-center gap-2 text-1xl font-extrabold premium-text">
+                        Premium
+                    </div>
+                        <i className="fa-solid fa-crown text-yellow-400 drop-shadow-md premium-text ml-2 animate-bounce"></i>
+                        <style>
+                            {`
+                                .premium-text {
+                                    background: linear-gradient(
+                                    270deg,
+                                    #ff0000, #ff9900, #ffff00, #33ff00, #00ffff, #3300ff, #cc00ff, #ff0000
+                                    );
+                                    background-size: 400% 400%;
+                                    -webkit-background-clip: text;
+                                    -webkit-text-fill-color: transparent;
+                                    animation: gradientMove 8s ease infinite;
+                                }
+
+                                @keyframes gradientMove {
+                                    0% { background-position: 0% 50%; }
+                                    50% { background-position: 100% 50%; }
+                                    100% { background-position: 0% 50%; }
+                                }
+                            `}
+                        </style>
+                    </div>
                     :
 
                     < button className="bg-white text-black text-sm font-semibold px-4 py-1 rounded-full" onClick={() => { setOpenModalPremium(true) }}>

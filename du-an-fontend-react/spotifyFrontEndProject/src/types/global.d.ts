@@ -17,13 +17,14 @@ declare global {
             total: number;
         },
         result: T[]
+        
     }
     interface IUser{
         isAuthenticated: boolean;
         user: {
             full_name: string;
             role_id: string;
-            user_id: string;
+            id: string;
             user_name: number;
             is_superuser: number;
         }
@@ -49,12 +50,21 @@ declare global {
     interface ITrack{
         track_id: number;
         title: string;
+        artist: {
+            artist_id: number;
+        name: string;
+        popularity_score: number;
+        gener: string;
+        follower: number;
+        avatar: string;
+        };
         is_copyright : number;
         price : string;
         image_url : string;
         release_date : string;
         namemp3: string;
         listen: number;
+        mv_url: string;
     }
     interface IArtist {
         artist_id: number;
@@ -63,5 +73,10 @@ declare global {
         gener: string;
         follower: number;
         avatar: string;
+    }
+    interface IPlaylist {
+        name: string;
+        userid: string;
+        
     }
 }

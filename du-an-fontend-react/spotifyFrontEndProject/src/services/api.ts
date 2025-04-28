@@ -22,9 +22,24 @@ export const fetchAccountAPI = () => {
 export const getTrackAPI = () => {
     const urlBackend = '/tracks/toptrack/';
     return axios.get<IBackendRes<ITrack[]>>(urlBackend);
-}
+}   
 //Get top singer
 export const getTopArtistAPI = () => {
     const urlBackend = '/artists/list/';
     return axios.get<IBackendRes<IArtist[]>>(urlBackend);
+}
+//Create playlist
+export const createPlaylistAPI = (user_id:string, name:string) => {
+    const urlBackend = '/playlists/create/';
+    return axios.post<IBackendRes<IPlaylist>>(urlBackend,{user_id, name});
+}
+//Get playlist
+export const getPlaylistAPI = (user_id: number) => {
+    const urlBackend = `/playlists/list-playlist?user_id=${user_id}`;
+    return axios.get<IBackendRes<IPlaylist>>(urlBackend);
+}
+//add to playlist
+export const addToPlaylistAPI = (playlist_id:number, track_id:number) => {
+    const urlBackend = '/playlist_detail/addtracktoplaylist/';
+    return axios.post<IBackendRes<IPlaylist>>(urlBackend,{playlist_id, track_id});
 }

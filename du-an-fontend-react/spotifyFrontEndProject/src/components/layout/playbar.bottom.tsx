@@ -79,12 +79,11 @@ const PlayerBar = () => {
                 <img
                     src={currentTrack.image_url}
                     alt="Song Cover"
-
                     className="w-14 h-14 rounded"
                 />
                 <div>
                     <div className="text-sm font-semibold truncate">{currentTrack.title}</div>
-                    <div className="text-xs text-gray-400">{currentTrack.listen}</div>
+                    <div className="text-xs text-gray-400">{currentTrack.artist.name}</div>
                 </div>
             </div>
 
@@ -163,11 +162,7 @@ const PlayerBar = () => {
                     <i className="fa fa-desktop" />
                 </button>
             </div>
-
         </div>
-
-
-
     );
 };
 

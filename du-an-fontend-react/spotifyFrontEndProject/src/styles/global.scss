@@ -9,3 +9,19 @@
 body {
     font-family: "DM Sans", sans-serif;
 }
+.premium-text {
+                                    background: linear-gradient(
+                                    270deg,
+                                    #ff0000, #ff9900, #ffff00, #33ff00, #00ffff, #3300ff, #cc00ff, #ff0000
+                                    );
+                                    background-size: 400% 400%;
+                                    -webkit-background-clip: text;
+                                    -webkit-text-fill-color: transparent;
+                                    animation: gradientMove 8s ease infinite;
+                                }
+
+                                @keyframes gradientMove {
+                                    0% { background-position: 0% 50%; }
+                                    50% { background-position: 100% 50%; }
+                                    100% { background-position: 0% 50%; }
+                                }

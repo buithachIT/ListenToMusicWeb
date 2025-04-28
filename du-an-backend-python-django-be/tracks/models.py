@@ -12,6 +12,7 @@ class Tracks(models.Model):
     release_date = models.DateField(blank=True, null=True)
     namemp3 = models.CharField(max_length=200)
     listen = models.IntegerField(blank=True, null=True)
+    mv_url = models.TextField(blank=True, null=True)
     class Meta:
         managed = False
         db_table = 'tracks'

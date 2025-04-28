@@ -41,7 +41,7 @@ GET:    /track/top10track/      lấy danh sách 10 bài hát nhiều lượt ng
 GET:    /track/artist-top/1/    lấy danh sách bài hát theo lượt nghe giảm dần của nghệ sĩ(1 là biến id nghệ sĩ)
 
 playlist
-
+playlist/create
 
 
 playlistdetail
