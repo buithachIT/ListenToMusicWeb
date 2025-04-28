@@ -25,10 +25,9 @@ const LoginPage = () => {
         const res = await loginAPI(username, password);
 
         if (res.data) {
-            // setIsAuthenticated(true);
-            // setUser(res.data.user);
-            // localStorage.setItem('access_token', res.data.access_token);
-            console.log("check res login>> ", res)
+            setIsAuthenticated(true);
+            setUser(res.data.user);
+            localStorage.setItem('access_token', res.data.access_token);
             message.success("Thành công!");
             navigate('/')
         } else {

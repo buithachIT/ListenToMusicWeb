@@ -1,11 +1,11 @@
 
 
-const ManageUserPage = () => {
-    return (
-        <div>
-            <TableUser />
-        </div>
-    )
-}
+// const ManageUserPage = () => {
+//     return (
+//         <div>
+//             <TableUser />
+//         </div>
+//     )
+// }
 
-export default ManageUserPage;
+// export default ManageUserPage;

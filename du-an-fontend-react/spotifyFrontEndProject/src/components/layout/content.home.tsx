@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { usePlayer } from '../context/player.context';
 import SimpleBar from 'simplebar-react';
 import { useCurrentApp } from '../context/app.context';
-import { Button, message, Modal, Space } from 'antd';
+import { Button, Modal } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/global.scss';
 const HomeContent = () => {
@@ -45,7 +45,7 @@ const HomeContent = () => {
     const { setCurrentTrack, setIsPlaying, setCurrentIndex, setPlayList } = usePlayer();
     console.log("Check premium>>", user)
     const handleClickTrack = (track: ITrack, index: number) => {
-        if (track.is_copyright && !user?.is_superuser == 1) {
+        if (track.is_copyright && !user?.is_superuser == true) {
             setOpenModalPremium(true);
             return;
         }
@@ -58,12 +58,13 @@ const HomeContent = () => {
 
 
     //Scroll 
-    const scrollRef = useRef<any>(null); // hoặc HTMLDivElement
+    const scrollRef = useRef<HTMLDivElement | null>(null);
     const scrollLeft = () => {
-        scrollRef.current?.getScrollElement().scrollBy({ left: -300, behavior: 'smooth' });
+        scrollRef.current?.scrollBy({ left: -300, behavior: 'smooth' });
     };
+
     const scrollRight = () => {
-        scrollRef.current?.getScrollElement().scrollBy({ left: 300, behavior: 'smooth' });
+        scrollRef.current?.scrollBy({ left: 300, behavior: 'smooth' });
     };
 
 
@@ -98,8 +99,7 @@ const HomeContent = () => {
                     <button className="text-sm text-gray-400 hover:underline font-bold text-xs mr-3">Show all</button>
                 </div>
                 <div className="relative">
-                    <SimpleBar ref={scrollRef} forceVisible="x" autoHide={false}>
-
+                    <SimpleBar forceVisible="x" autoHide={false} scrollableNodeProps={{ ref: scrollRef }}>
                         <div className="flex gap-4 px-2">
                             {listTrack.map((item, index) => (
                                 <div
@@ -107,7 +107,7 @@ const HomeContent = () => {
                                     key={item.track_id}
                                     className="relative flex-none w-40 cursor-pointer hover:bg-[#1a1a1a] p-2 rounded"
                                 >
-                                    {(user?.is_premium) ?
+                                    {(user?.is_superuser == 0) ?
                                         (
                                             item.is_copyright && (
                                                 <span className="absolute top-1 left-1 text-black text-xs font-bold px-2 py-0.5 rounded-full shadow-lg z-10">
@@ -132,19 +132,20 @@ const HomeContent = () => {
                                 </div>
                             ))}
                         </div>
-                        <button
-                            onClick={scrollLeft}
-                            className="absolute left-0 z-10 bg-black/60 text-white p-2 rounded-full top-1/2 -translate-y-1/2"
-                        >
-                            <i className="fa fa-chevron-left" />
-                        </button>
-                        <button
-                            onClick={scrollRight}
-                            className="absolute right-0 z-10 bg-black/60 text-white p-2 rounded-full top-1/2 -translate-y-1/2"
-                        >
-                            <i className="fa fa-chevron-right" />
-                        </button>
+
                     </SimpleBar>
+                    <button
+                        onClick={scrollLeft}
+                        className="absolute left-0 z-10 bg-black/60 text-white p-2 rounded-full top-1/2 -translate-y-1/2"
+                    >
+                        <i className="fa fa-chevron-left" />
+                    </button>
+                    <button
+                        onClick={scrollRight}
+                        className="absolute right-0 z-10 bg-black/60 text-white p-2 rounded-full top-1/2 -translate-y-1/2"
+                    >
+                        <i className="fa fa-chevron-right" />
+                    </button>
                 </div>
                 {/* POPULAR SINGER */}
                 {/* Header */}

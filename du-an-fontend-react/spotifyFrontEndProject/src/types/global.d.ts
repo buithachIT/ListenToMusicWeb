@@ -21,14 +21,12 @@ declare global {
     }
     interface IUser{
         isAuthenticated: boolean;
-        user: {
-            full_name: string;
-            role_id: string;
-            id: string;
-            user_name: number;
-            is_superuser: number;
-            url_avatar: string;
-        }
+        fullname: string;
+        role_id: number;
+        id: number;
+        user_name: string;
+        is_superuser: number;
+        url_avatar: string;
     }
     interface ILogin{
        access_token: string;
@@ -76,6 +74,7 @@ declare global {
         avatar: string;
     }
     interface IPlaylist {
+        playlist_id: number;
         name: string;
         userid: string;
         

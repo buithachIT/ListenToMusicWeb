@@ -1,6 +1,6 @@
 
 import { useCurrentApp } from "../context/app.context";
-import { App, Avatar, Divider, Drawer, Dropdown, Space } from "antd";
+import { App, Avatar, Dropdown, Space } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
@@ -15,7 +15,7 @@ const Navbar = () => {
         setUser(null);
         message.success("Đăng xuất thành công!")
     }
-    let items = [
+    const items = [
         {
             label: <Link to="/history">Lịch sử mua hàng</Link>,
             key: 'history',
@@ -157,7 +157,6 @@ const Navbar = () => {
                     <Dropdown menu={{ items }} trigger={['click']}>
                         <Space >
                             <Avatar src={urlAvatar} />
-                            {user?.fullName}
                             <p>Xin chào, {user?.fullname}</p>
                         </Space>
                     </Dropdown>}

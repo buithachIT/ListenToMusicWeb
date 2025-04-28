@@ -98,7 +98,7 @@ const LayoutAdmin = () => {
     const isAdminRoute = location.pathname.includes("admin");
     if (isAuthenticated == true && isAdminRoute == true) {
         const role = user?.role_id;
-        if (role == "USER") {
+        if (role == 0) {
             return (
                 <Outlet />
             )
@@ -143,7 +143,7 @@ const LayoutAdmin = () => {
                         </span>
                         <Dropdown menu={{ items: itemsDropdown }} trigger={['click']}>
                             <Space style={{ cursor: "pointer" }}>
-                                Xin chào, {user?.full_name}
+                                Xin chào, {user?.fullname}
                             </Space>
                         </Dropdown>
                     </div>

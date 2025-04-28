@@ -1,4 +1,3 @@
-import { App } from "antd";
 import { useCurrentApp } from "../components/context/app.context";
 
 const HomePage = () => {

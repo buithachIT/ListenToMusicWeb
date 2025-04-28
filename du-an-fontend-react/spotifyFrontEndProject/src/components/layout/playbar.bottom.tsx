@@ -1,8 +1,8 @@
-import { useDebugValue, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { usePlayer } from '../context/player.context';
 
 const PlayerBar = () => {
-    const { currentTrack, setCurrentTrack, isPlaying, setIsPlaying, currentIndex, setCurrentIndex, playlist, setPlayList } = usePlayer();
+    const { currentTrack, setCurrentTrack, isPlaying, setIsPlaying, currentIndex, setCurrentIndex, playlist } = usePlayer();
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const [isAudioReady, setIsAudioReady] = useState(false);
     const [currentTime, setCurrentTime] = useState<number>(0);
@@ -72,8 +72,9 @@ const PlayerBar = () => {
     return (
         <div className="fixed bottom-0 left-0 right-0 h-24 bg-black border-t border-gray-800 flex items-center justify-between px-6 z-50 text-white">
             <audio ref={audioRef} src={urlTrack} onLoadedMetadata={() => setIsAudioReady(true)} onTimeUpdate={() => {
-                setCurrentTime(audioRef.current?.currentTime);
-            }} onEnded={handleNext} onVolumeChange={volume} />
+                setCurrentTime(audioRef.current?.currentTime || 0);
+                ;
+            }} onEnded={handleNext} />
             {/* --- Left: Song Info --- */}
             <div className="flex items-center space-x-4 w-1/3">
                 <img
@@ -126,7 +127,7 @@ const PlayerBar = () => {
                         }}
                         className="w-full h-1 accent-white"
                     />
-                    <span>{formatTime(audioRef.current?.duration)}</span>
+                    <span>{formatTime(audioRef.current?.duration || 0)}</span>
                 </div>
             </div>
 

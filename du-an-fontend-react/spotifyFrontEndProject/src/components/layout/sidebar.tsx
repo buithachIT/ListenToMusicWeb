@@ -22,7 +22,7 @@ const Sidebar = () => {
         if (!user?.id) return;
         const res = await getPlaylistAPI(user.id);
         if (res.data) {
-            setAlbums(res.data);
+            setAlbums([res.data]);
         }
     };
 
@@ -39,10 +39,13 @@ const Sidebar = () => {
     //Get playlist
     useEffect(() => {
         const getPlaylist = async () => {
-            const res = await getPlaylistAPI(user?.id);
-            if (res.data) {
-                setAlbums(res.data);;
+            if (user?.id) {
+                const res = await getPlaylistAPI(user?.id);
+                if (res.data) {
+                    setAlbums([res.data]);;
+                }
             }
+
         }
         getPlaylist();
     }, [user?.id])
