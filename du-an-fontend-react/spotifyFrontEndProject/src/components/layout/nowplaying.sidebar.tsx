@@ -43,6 +43,23 @@ const NowPlayingSidebar = () => {
             }
         }
     }
+    const handleDownloadMV = async () => {
+        try {
+            const response = await fetch(mv_url);
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'video.mp4';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error('Download error:', error);
+        }
+    }
     const mv_url = `${import.meta.env.VITE_BACKEND_URL}/media/mv_file/${currentTrack.mv_url}`;
     return (
         <>
@@ -131,14 +148,14 @@ const NowPlayingSidebar = () => {
                                 Thêm vào danh sách yêu thích
                             </div>
                         </div>
-                        {(user?.is_superuser) ? <div className="relative group ml-5" onClick={() => { handleAddToPlaylist(currentTrack?.track_id) }}>
+                        {(user?.is_superuser) ? <div className="relative group ml-5" onClick={handleDownloadMV}>
                             <i className="fas fa-download premium-text"></i>
                             <div className="absolute bottom-full mb-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
                                 Tải MV
                             </div>
                         </div>
                             :
-                            <div className="relative group ml-5" onClick={() => { handleAddToPlaylist(currentTrack?.track_id) }}>
+                            <div className="relative group ml-5" >
                                 <i className="fas fa-download"></i> <i className="relative bottom-2 right-2 fas fa-crown fa-xs text-yellow-400 "></i>
                                 <div className="absolute bottom-full mb-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
                                     Tải MV
@@ -213,7 +230,7 @@ const NowPlayingSidebar = () => {
 
                     </div>
                 </aside>
-            </SimpleBar>
+            </SimpleBar >
         </>
     );
 };

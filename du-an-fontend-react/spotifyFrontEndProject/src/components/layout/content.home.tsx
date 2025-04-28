@@ -6,6 +6,7 @@ import SimpleBar from 'simplebar-react';
 import { useCurrentApp } from '../context/app.context';
 import { Button, message, Modal, Space } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import '../../styles/global.scss';
 const HomeContent = () => {
 
 
@@ -24,7 +25,6 @@ const HomeContent = () => {
             setListArtist(res.data);
         }
     }
-
 
     //Render tracks
     const [listTrack, setListTrack] = useState<ITrack[]>([]);
@@ -107,12 +107,24 @@ const HomeContent = () => {
                                     key={item.track_id}
                                     className="relative flex-none w-40 cursor-pointer hover:bg-[#1a1a1a] p-2 rounded"
                                 >
+                                    {(user?.is_premium) ?
+                                        (
+                                            item.is_copyright && (
+                                                <span className="absolute top-1 left-1 text-black text-xs font-bold px-2 py-0.5 rounded-full shadow-lg z-10">
+                                                    <i className="fa-solid fa-crown  text-yellow-400 drop-shadow-md"></i>
+                                                </span>
+                                            )
+                                        )
+                                        :
+                                        (
+                                            item.is_copyright && (
+                                                <span className="absolute top-1 left-1 text-black text-xs font-bold px-2 py-0.5 rounded-full shadow-lg z-10">
+                                                    <i className="fa-solid fa-crown premium-text drop-shadow-md"></i>
+                                                </span>
+                                            )
+                                        )
+                                    }
                                     {/* Premium badge */}
-                                    {item.is_copyright && (
-                                        <span className="absolute top-1 left-1 text-black text-xs font-bold px-2 py-0.5 rounded-full shadow-lg z-10">
-                                            <i className="fa-solid fa-crown text-yellow-400 drop-shadow-md"></i>
-                                        </span>
-                                    )}
 
                                     <img src={item.image_url} className="w-full h-40 object-cover rounded" />
                                     <h3 className="text-sm font-semibold truncate">{item.title}</h3>
