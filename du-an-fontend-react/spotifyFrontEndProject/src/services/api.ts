@@ -11,7 +11,10 @@ export const registerAPI = (user_name: string, fullname: string, phone: string, 
     const urlBackend = '/users/register/';
     return axios.post<IBackendRes<IRegister>>(urlBackend, { user_name, fullname, phone, password });
 }
-
+export const logoutAPI = () => {
+    const urlBackend = '/users/logout/';
+    return axios.post<IBackendRes<IFetchAccount>>(urlBackend);
+};
 //Fetch account
 export const fetchAccountAPI = () => {
     const urlBackend = '/users/profile/';

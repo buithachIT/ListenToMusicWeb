@@ -173,3 +173,28 @@ class UserProfileView(APIView):
             "is_superuser": user.is_superuser,
             "url_avatar": user.url_avatar}}
         })
+# Đăng xuất người dùng
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            user = request.user
+
+            # Xóa access_token và refresh_token lưu trong DB (nếu có)
+            user.accesstoken = ''
+            user.refreshtoken = ''
+            user.save()
+
+            # Xóa cookie refresh_token ở trình duyệt
+            response = Response({
+                "message": "Đăng xuất thành công!"
+            }, status=status.HTTP_200_OK)
+            response.delete_cookie('refresh_token')
+
+            return response
+        except Exception as e:
+            return Response({
+                "error": "Có lỗi xảy ra trong quá trình đăng xuất.",
+                "details": str(e)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

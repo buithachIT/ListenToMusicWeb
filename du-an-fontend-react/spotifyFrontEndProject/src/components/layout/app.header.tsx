@@ -2,18 +2,21 @@
 import { useCurrentApp } from "../context/app.context";
 import { App, Avatar, Dropdown, Space } from "antd";
 import { Link, useNavigate } from "react-router-dom";
+import { logoutAPI } from "../../services/api";
 
 const Navbar = () => {
     const { isAuthenticated, setIsAuthenticated, user, setUser, setOpenModalPremium } = useCurrentApp();
     const navigate = useNavigate();
     const { message } = App.useApp();
 
-    const handleLogout = () => {
-
-        localStorage.removeItem("access_token");
-        setIsAuthenticated(false);
-        setUser(null);
-        message.success("Đăng xuất thành công!")
+    const handleLogout = async () => {
+        const res = await logoutAPI();
+        if (res.message) {
+            message.success(res.message);
+            localStorage.removeItem("access_token");
+            setIsAuthenticated(false);
+            setUser(null);
+        }
     }
     const items = [
         {
