@@ -27,7 +27,7 @@ const NowPlayingSidebar = () => {
     }
 
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
-        console.log("Check values>>", values)
+
         const { track_id, playlist_id } = values;
         const res = await addToPlaylistAPI(playlist_id, track_id);
         if (res.data) {

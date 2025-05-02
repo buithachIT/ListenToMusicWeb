@@ -84,9 +84,6 @@ const PlayerBar = () => {
         setIsPlaying(false);
     };
     const handleShuffle = () => {
-        console.log('Before shuffle - Current track:', currentTrack);
-        console.log('Before shuffle - Playlist:', playlist);
-
         const shuffledPlaylist = [...playlist];
 
         // Shuffle
@@ -95,20 +92,16 @@ const PlayerBar = () => {
             [shuffledPlaylist[i], shuffledPlaylist[j]] = [shuffledPlaylist[j], shuffledPlaylist[i]];
         }
 
-        console.log('After shuffle - Shuffled playlist:', shuffledPlaylist);
 
         const currentTrackId = currentTrack?.track_id;
-        console.log('Current track ID:', currentTrackId);
 
         const newIndex = shuffledPlaylist.findIndex(track => track.track_id === currentTrackId);
-        console.log('New index:', newIndex);
 
         setPlayList(shuffledPlaylist);
-        if (newIndex !== -1) {
-            setCurrentIndex(newIndex);
-            setCurrentTrack(shuffledPlaylist[newIndex]);
-            setIsPlaying(true);
-        }
+        setCurrentIndex(newIndex);
+        setCurrentTrack(shuffledPlaylist[newIndex]);
+        setIsPlaying(true);
+
     };
 
     const handleRepeat = () => {

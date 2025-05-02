@@ -18,6 +18,8 @@ import RegisterPage from './pages/client/auth/register.tsx';
 import LayoutAdmin from './components/layout/admin/layout.admin.tsx';
 import { PlayerProvider } from './components/context/player.context.tsx';
 import { AlbumProvider } from './components/context/album.context.tsx';
+import ManageUserPage from './pages/admin/manage.user.tsx';
+import TableUser from './components/admin/user/table.user.tsx';
 
 const router = createBrowserRouter([
   {
@@ -54,7 +56,13 @@ const router = createBrowserRouter([
       <ProtectedRoute>
         <LayoutAdmin />
       </ProtectedRoute>
-    )
+    ),
+    children: [
+      {
+        path: "user",
+        element: <TableUser />
+      }
+    ]
   }
 ]);
 
