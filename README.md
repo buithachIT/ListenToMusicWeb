@@ -36,6 +36,8 @@ Dự án Spotify Clone là một ứng dụng web được xây dựng để mô
 - Shuffle và Repeat
 - Phân quyền người dùng (superuser)
 - Bảo vệ bản quyền bài hát
+## Demo
+![image](https://github.com/user-attachments/assets/ae761bcc-da2e-4382-bc87-c1e66e369187)
 
 ## Cài đặt
 
