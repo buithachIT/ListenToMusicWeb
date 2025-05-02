@@ -31,7 +31,7 @@ urlpatterns = [
     path('tracks/', include('tracks.urls')), 
     path('playlists/', include('playlists.urls')), 
     path('playlist_detail/', include('playlist_detail.urls')), 
-
+    path('chatbox/', include('chatbox.urls')),
     
     path('addtrack/',CreateTrackView.as_view(),name='track'),
     path('addartist/', CreateArtistView.as_view(), name='artist'),
