@@ -15,7 +15,9 @@ class RegisterUserView(APIView):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({"message": "Đăng ký thành công!", "status":status.HTTP_201_CREATED}, status=status.HTTP_201_CREATED)
+            return Response({"message": "Đăng ký thành công!", "status":status.HTTP_201_CREATED,"data": {
+                    "HUNG HUY CAO"
+                },}, status=status.HTTP_201_CREATED)
         return Response({"message": serializer.errors, "status" :status.HTTP_400_BAD_REQUEST})
     
 # Sự kiện đăng nhập người dùng    
@@ -56,14 +58,13 @@ class LoginView(generics.GenericAPIView):
                 "errors": None,
             }, status=status.HTTP_200_OK)
 
-            # Gắn refresh_token vào cookie HTTPOnly
             response.set_cookie(
                 key='refresh_token',
                 value=refresh_token,
                 httponly=True,
-                secure=True,               # Trong môi trường dev có thể để False
+                secure=True,               
                 samesite='Lax',
-                max_age=7 * 24 * 60 * 60,  # 7 ngày
+                max_age=7 * 24 * 60 * 60,  
                 path='/' 
             )
             return response

@@ -22,7 +22,7 @@ const Sidebar = () => {
         if (!user?.id) return;
         const res = await getPlaylistAPI(user.id);
         if (res.data) {
-            setAlbums([res.data]);
+            setAlbums(res.data);
         }
     };
 
@@ -42,10 +42,9 @@ const Sidebar = () => {
             if (user?.id) {
                 const res = await getPlaylistAPI(user?.id);
                 if (res.data) {
-                    setAlbums([res.data]);;
+                    setAlbums(res.data);
                 }
             }
-
         }
         getPlaylist();
     }, [user?.id])

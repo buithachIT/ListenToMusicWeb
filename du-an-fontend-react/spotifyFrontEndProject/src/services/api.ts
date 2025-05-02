@@ -39,7 +39,7 @@ export const createPlaylistAPI = (user_id:string, name:string) => {
 //Get playlist
 export const getPlaylistAPI = (user_id: number) => {
     const urlBackend = `/playlists/list-playlist?user_id=${user_id}`;
-    return axios.get<IBackendRes<IPlaylist>>(urlBackend);
+    return axios.get<IBackendRes<IPlaylist[]>>(urlBackend);
 }
 //add to playlist
 export const addToPlaylistAPI = (playlist_id:number, track_id:number) => {

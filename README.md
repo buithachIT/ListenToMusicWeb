@@ -1,41 +1,96 @@
-# 🎧 ListenToMusicWeb — Spotify Clone App
+# Spotify Clone Project
 
-ListenToMusicWeb là một ứng dụng web nghe nhạc trực tuyến lấy cảm hứng từ Spotify, được xây dựng với ReactJS cho frontend và Django REST Framework cho backend. Dự án hỗ trợ quản lý bài hát, playlist, người dùng, và cơ chế xác thực an toàn bằng JWT và refresh token qua cookie.
+## Giới thiệu
 
----
+Dự án Spotify Clone là một ứng dụng web được xây dựng để mô phỏng các tính năng chính của Spotify, sử dụng React cho frontend và Django cho backend.
 
-## 🚀 Demo (Coming soon)
-
-> Chưa deploy. Dự kiến cập nhật sau.
-
----
-
-## 🛠️ Công nghệ sử dụng
+## Công nghệ sử dụng
 
 ### Frontend
-- ReactJS (TypeScript + Vite)
-- React Router v6
+
+- React 18.3.1
+- TypeScript
+- Tailwind CSS
+- Vite
+- React Router DOM
 - Axios
-- TailwindCSS
 - Ant Design
-- Context API
+- React Spinners
+- SimpleBar React
 
 ### Backend
-- Django
+
+- Django 5.1.7
 - Django REST Framework
-- Simple JWT (access + refresh token)
-- django-cors-headers
-- PostgreSQL / SQLite (tuỳ môi trường)
+- MySQL
+- JWT Authentication
+- CORS Headers
 
----
+## Tính năng chính
 
-## 📁 Cấu trúc thư mục
+- Đăng nhập/Đăng ký người dùng
+- Phát nhạc với các điều khiển cơ bản (play/pause, next/previous)
+- Quản lý playlist
+- Tìm kiếm bài hát
+- Điều chỉnh âm lượng
+- Shuffle và Repeat
+- Phân quyền người dùng (superuser)
+- Bảo vệ bản quyền bài hát
+
+## Cài đặt
+
+### Yêu cầu hệ thống
+
+- Node.js (v14 trở lên)
+- Python (v3.8 trở lên)
+- MySQL
+
+### Frontend
 
 ```bash
-ListenToMusicWeb/
-│
-├── du-an-backend-python-django-be/    # Backend Django project
-├── du-an-fontend-react/
-│   └── spotifyFrontEndProject/        # Frontend React project
-│
-└── README.md
+# Di chuyển vào thư mục frontend
+cd du-an-fontend-react/spotifyFrontEndProject
+
+# Cài đặt dependencies
+npm install
+
+# Chạy development server
+npm run dev
+```
+
+### Backend
+
+```bash
+# Di chuyển vào thư mục backend
+cd du-an-backend-python-django-be
+
+# Tạo môi trường ảo
+python -m venv venv
+
+# Kích hoạt môi trường ảo
+# Windows
+venv\Scripts\activate
+# Linux/Mac
+source venv/bin/activate
+
+# Cài đặt dependencies
+pip install -r requirements.txt
+
+# Chạy migrations
+python manage.py migrate
+
+# Chạy development server
+python manage.py runserver
+```
+
+## Cấu hình
+
+### Frontend
+
+Tạo file `.env` trong thư mục frontend:
+
+## Liên hệ
+
+- Bùi Công Thạch
+
+Link dự án: [https://github.com/buithachIT/ListenToMusicWeb](https://github.com/buithachIT/ListenToMusicWeb)

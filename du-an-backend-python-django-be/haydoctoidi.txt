@@ -45,3 +45,16 @@ playlist/create
 
 
 playlistdetail
+
+
+
+
+
+
+
+
+
+
+
+
+ollama, MCP, LLM. 

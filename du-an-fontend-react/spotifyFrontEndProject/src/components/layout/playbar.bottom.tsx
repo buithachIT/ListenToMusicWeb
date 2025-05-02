@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { usePlayer } from '../context/player.context';
+import { useCurrentApp } from '../context/app.context';
 
 const PlayerBar = () => {
-    const { currentTrack, setCurrentTrack, isPlaying, setIsPlaying, currentIndex, setCurrentIndex, playlist } = usePlayer();
+    const { user } = useCurrentApp();
+    const { currentTrack, setCurrentTrack, isPlaying, setIsPlaying, currentIndex, setCurrentIndex, playlist, setPlayList } = usePlayer();
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const [isAudioReady, setIsAudioReady] = useState(false);
     const [currentTime, setCurrentTime] = useState<number>(0);
@@ -50,16 +52,72 @@ const PlayerBar = () => {
     };
 
     const handleNext = () => {
-        const nextIndex = currentIndex + 1;
-        if (nextIndex < playlist.length) {
+        let nextIndex = currentIndex + 1;
+        const endpoint = playlist.length;
+        while (nextIndex < playlist.length) {
+            if (nextIndex == endpoint) {
+                nextIndex = 0;
+                continue;
+            }
+            const nextTrack = playlist[nextIndex];
+            if (nextTrack.is_copyright && !user?.is_superuser) {
+                nextIndex++;
+                continue;
+            } else {
+                // Nếu bài thường -> phát
+                setCurrentIndex(nextIndex);
+                setCurrentTrack(nextTrack);
+                setIsPlaying(true);
+                return;
+            }
+        }
+        // Reset về bài đầu tiên nếu đã hết playlist
+        nextIndex = 0;
+        const firstTrack = playlist[nextIndex];
+        if (!firstTrack.is_copyright || user?.is_superuser) {
             setCurrentIndex(nextIndex);
-            setCurrentTrack(playlist[nextIndex]);
+            setCurrentTrack(firstTrack);
+            setIsPlaying(true);
+            return;
+        }
+        // Nếu hết bài để phát
+        setIsPlaying(false);
+    };
+    const handleShuffle = () => {
+        console.log('Before shuffle - Current track:', currentTrack);
+        console.log('Before shuffle - Playlist:', playlist);
+
+        const shuffledPlaylist = [...playlist];
+
+        // Shuffle
+        for (let i = shuffledPlaylist.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffledPlaylist[i], shuffledPlaylist[j]] = [shuffledPlaylist[j], shuffledPlaylist[i]];
+        }
+
+        console.log('After shuffle - Shuffled playlist:', shuffledPlaylist);
+
+        const currentTrackId = currentTrack?.track_id;
+        console.log('Current track ID:', currentTrackId);
+
+        const newIndex = shuffledPlaylist.findIndex(track => track.track_id === currentTrackId);
+        console.log('New index:', newIndex);
+
+        setPlayList(shuffledPlaylist);
+        if (newIndex !== -1) {
+            setCurrentIndex(newIndex);
+            setCurrentTrack(shuffledPlaylist[newIndex]);
             setIsPlaying(true);
         }
-        else {
-            setIsPlaying(false);
+    };
+
+    const handleRepeat = () => {
+        if (audioRef.current) {
+            audioRef.current.currentTime = 0;
+            audioRef.current.play();
         }
-    }
+    };
+
     const handlePrevious = () => {
         const preIndex = currentIndex - 1;
         if (preIndex < playlist.length) {
@@ -91,7 +149,7 @@ const PlayerBar = () => {
             {/* --- Center: Player Controls --- */}
             <div className="flex flex-col items-center w-1/3">
                 <div className="flex space-x-4 items-center">
-                    <button className="text-gray-400 hover:text-white">
+                    <button className="text-gray-400 hover:text-white" onClick={handleShuffle}>
                         <i className="fa fa-random" />
                     </button>
                     <button className="text-gray-400 hover:text-white" onClick={handlePrevious}>
@@ -107,7 +165,7 @@ const PlayerBar = () => {
                     <button className="text-gray-400 hover:text-white" onClick={handleNext}>
                         <i className="fa fa-step-forward" />
                     </button>
-                    <button className="text-gray-400 hover:text-white">
+                    <button className="text-gray-400 hover:text-white" onClick={handleRepeat}>
                         <i className="fa fa-repeat" />
                     </button>
                 </div>

@@ -14,7 +14,7 @@ type FieldType = {
 const NowPlayingSidebar = () => {
     const [isOpenModalPlaylist, setIsOpenModalPlaylist] = useState(false);
     const { currentTrack, setIsPlaying } = usePlayer();
-    const { showNowPlayingSideBar, setShowNowPlayingSideBar, user } = useCurrentApp();
+    const { showNowPlayingSideBar, setShowNowPlayingSideBar, user, setOpenModalPremium } = useCurrentApp();
     const { albums } = useAlbum();
     const [form] = Form.useForm();
     const [pendingTrackId, setPendingTrackId] = useState<number | null>(null);
@@ -125,14 +125,13 @@ const NowPlayingSidebar = () => {
                             </div>
                         </div>
                             :
-                            <div className="relative group ml-5" >
+                            <div className="relative group ml-5" onClick={() => { setOpenModalPremium(true) }}>
                                 <i className="fas fa-download"></i> <i className="relative bottom-2 right-2 fas fa-crown fa-xs text-yellow-400 "></i>
                                 <div className="absolute bottom-full mb-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
                                     Tải MV
                                 </div>
                             </div>
                         }
-
                     </div>
                     <div className="lyrics mt-5 ">
                         <p className="font-bold">

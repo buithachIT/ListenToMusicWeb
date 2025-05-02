@@ -20,10 +20,6 @@ const Navbar = () => {
     }
     const items = [
         {
-            label: <Link to="/history">Lịch sử mua hàng</Link>,
-            key: 'history',
-        },
-        {
             label: <label
                 style={{ cursor: 'pointer' }}
                 onClick={() => handleLogout()}
@@ -85,9 +81,6 @@ const Navbar = () => {
                         className="bg-transparent text-white text-sm w-full focus:outline-none"
                     />
                 </div>
-
-                {/* Inbox icon */}
-
             </div>
 
             {/* Right section */}
@@ -135,7 +128,7 @@ const Navbar = () => {
                         <path d="M12 16l4-5h-3V4h-2v7H8z" />
                         <path d="M20 18H4v2h16z" />
                     </svg>
-                    <span>Install App</span>
+                    <span className="font-bold">Install App</span>
                 </div>
                 <div className="relative cursor-pointer">
                     <svg
@@ -163,8 +156,6 @@ const Navbar = () => {
                             <p>Xin chào, {user?.fullname}</p>
                         </Space>
                     </Dropdown>}
-
-
             </div>
         </nav >
     );

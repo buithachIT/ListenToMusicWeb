@@ -18,17 +18,13 @@ const RegisterForm: React.FC = () => {
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
         setIsSubmit(true);
         const { email, fullname, phone, password } = values;
-        console.log("check values>>", values);
 
         const res = await registerAPI(email, fullname, phone, password);
-        console.log("API response:", res);
-        console.log("Backend URL:", import.meta.env.VITE_BACKEND_URL);
-
         if (res.data) {
-            message.success("Đăng ký user thành công!")
+            message.success(res.message)
             navigate("/login");
         } else {
-            message.error(res.detail);
+            message.error(res.message);
         }
         setIsSubmit(false);
     };
@@ -77,7 +73,7 @@ const RegisterForm: React.FC = () => {
                         name="password"
                         rules={[{ required: true, message: "Vui lòng nhập mật khẩu!", type: "string" }]}
                     >
-                        <Input className="cus-placeholder" placeholder="Your password" prefix={<KeyOutlined />} style={{ backgroundColor: "#000000", color: "#fff", height: "50px", fontSize: "16px" }} />
+                        <Input.Password className="cus-placeholder" placeholder="Your password" prefix={<KeyOutlined />} style={{ backgroundColor: "#000000", color: "#fff", height: "50px", fontSize: "16px" }} />
                     </Form.Item>
 
                     <Button type="primary" htmlType="submit" loading={isSubmit} block style={{ backgroundColor: "#1DB954", color: "#000000", borderColor: "#1DB954", height: "50px", fontSize: "16px", fontWeight: 'bold' }}>
