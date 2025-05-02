@@ -10,6 +10,8 @@ urlpatterns = [
     path('toptrack/', ListTrackTopView.as_view(), name='all_tracks'),
     path('top10track/', Top10TrackView.as_view(), name='top10_tracks'),
     path('artist-top/<int:artist_id>/', TracksByArtistView.as_view(), name='tracks_by_artist'),
+    path('search-by-artist/', search_by_artist, name='search_by_artist'),
+    path('search/',search_track, name='search_track')
 
 ]
 #hung ngáo

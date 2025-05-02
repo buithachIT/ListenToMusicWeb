@@ -89,3 +89,23 @@ class TracksByArtistView(APIView):
             "data": serializer.data,
             "message": f"Lấy danh sách bài hát theo artist_id={artist_id} thành công!"
         }, status=status.HTTP_200_OK)
+@api_view(['GET'])
+def search_track(request):
+    query = request.GET.get('q','').strip().lower()
+    if query:
+        tracks = Tracks.objects.filter(title__icontains=query)
+    else:
+        tracks = Tracks.objects.none()
+
+    serializer = TrackSerializer(tracks, many = True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def search_by_artist(request):
+    query = request.GET.get('q', '').strip()
+    if not query:
+        return Response({"error": "Missing query parameter 'q'"}, status=400)
+
+    tracks = Tracks.objects.filter(artist__name__icontains=query)
+    serializer = TrackSerializer(tracks, many=True)
+    return Response(serializer.data)
