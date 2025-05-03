@@ -18,8 +18,12 @@ import RegisterPage from './pages/client/auth/register.tsx';
 import LayoutAdmin from './components/layout/admin/layout.admin.tsx';
 import { PlayerProvider } from './components/context/player.context.tsx';
 import { AlbumProvider } from './components/context/album.context.tsx';
-import ManageUserPage from './pages/admin/manage.user.tsx';
 import TableUser from './components/admin/user/table.user.tsx';
+import TableTrack from './components/admin/track/table.track.tsx';
+import TableSinger from './components/admin/singer/table.singer.tsx';
+import enUS from 'antd/locale/en_US';
+import SearchPage from './pages/client/search.tsx';
+import PlaylistPage from './pages/client/playlist.tsx';
 
 const router = createBrowserRouter([
   {
@@ -30,7 +34,14 @@ const router = createBrowserRouter([
         index: true,
         element: <HomePage />
       },
-
+      {
+        path: "search",
+        element: <SearchPage />
+      },
+      {
+        path: "/playlist/:playlistId/:playlistName",
+        element: <PlaylistPage />
+      }
     ]
   },
   {
@@ -44,7 +55,6 @@ const router = createBrowserRouter([
   {
     path: "/checkout",
     element: (
-
       <ProtectedRoute>
         <div>Checkout Page</div>
       </ProtectedRoute>
@@ -61,18 +71,25 @@ const router = createBrowserRouter([
       {
         path: "user",
         element: <TableUser />
+      },
+      {
+        path: "track",
+        element: <TableTrack />
+      },
+      {
+        path: "singer",
+        element: <TableSinger />
       }
     ]
   }
 ]);
 
 createRoot(document.getElementById('root')!).render(
-
   <StrictMode>
     <App>
       <AlbumProvider>
         <PlayerProvider>
-          <ConfigProvider >
+          <ConfigProvider locale={enUS}>
             <AppProvider>
               <RouterProvider router={router} />
             </AppProvider>
@@ -80,5 +97,5 @@ createRoot(document.getElementById('root')!).render(
         </PlayerProvider>
       </AlbumProvider>
     </App>
-  </StrictMode>,
+  </StrictMode >,
 )

@@ -55,12 +55,12 @@ const LayoutAdmin = () => {
             ]
         },
         {
-            label: <Link to='/admin/book'>Manage tracks</Link>,
+            label: <Link to='/admin/track'>Manage tracks</Link>,
             key: 'track',
             icon: <CustomerServiceOutlined />
         },
         {
-            label: <Link to='/admin/order'>Manage singers</Link>,
+            label: <Link to='/admin/singer'>Manage singers</Link>,
             key: 'singer',
             icon: <StarOutlined />
         },

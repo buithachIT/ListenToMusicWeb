@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'tracks',
     'albums',
     'oders',
+    'chatbox',
     'playlists',
     'playlist_detail',
 ]

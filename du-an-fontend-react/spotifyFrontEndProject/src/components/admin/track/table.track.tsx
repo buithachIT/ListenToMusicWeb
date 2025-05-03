@@ -1,57 +1,54 @@
 import { EditTwoTone, DeleteTwoTone, PlusOutlined } from '@ant-design/icons';
-import { Table, Popconfirm, Button, Space, message } from 'antd';
+import { Table, Popconfirm, Button, Space, message, Image } from 'antd';
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import { useEffect, useState } from 'react';
-import { getAllUsersAPI, deleteUserAPI } from '../../../services/api';
-import CreateUser from './create.user';
-import UpdateUser from './update.user';
+import { getTrackAPI, deleteTrackAPI } from '../../../services/api';
 import { AxiosError } from 'axios';
+import AddTrack from './add.track';
 
-const TableUser = () => {
-    const [users, setUsers] = useState<IUserList[]>([]);
+const TableTrack = () => {
+    const [tracks, setTracks] = useState<ITrack[]>([]);
     const [loading, setLoading] = useState(false);
-    const [openModalCreate, setOpenModalCreate] = useState(false);
-    const [openModalUpdate, setOpenModalUpdate] = useState(false);
-    const [dataUpdate, setDataUpdate] = useState<IUserList | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [pagination, setPagination] = useState<TablePaginationConfig>({
         current: 1,
         pageSize: 5,
         total: 0,
     });
 
-    const fetchUsers = async () => {
+    const fetchTracks = async () => {
         setLoading(true);
         try {
-            const res = await getAllUsersAPI();
+            const res = await getTrackAPI();
             if (res?.data) {
-                setUsers(res.data);
+                setTracks(res.data);
                 setPagination(prev => ({
                     ...prev,
                     total: res.data?.length || 0,
                 }));
             }
         } catch (error) {
-            console.error('Error fetching users:', error);
+            console.error('Error fetching tracks:', error);
         }
         setLoading(false);
     };
 
     const handleDelete = async (id: number) => {
         try {
-            await deleteUserAPI(id);
-            message.success('User deleted successfully');
-            fetchUsers();
+            await deleteTrackAPI(id);
+            message.success('Track deleted successfully');
+            fetchTracks();
         } catch (error) {
             if (error instanceof AxiosError) {
-                message.error(error.response?.data?.message || 'Failed to delete user');
+                message.error(error.response?.data?.message || 'Failed to delete track');
             } else {
-                message.error('Failed to delete user');
+                message.error('Failed to delete track');
             }
         }
     };
 
     useEffect(() => {
-        fetchUsers();
+        fetchTracks();
     }, []);
 
     const handleTableChange = (newPagination: TablePaginationConfig) => {
@@ -60,40 +57,52 @@ const TableUser = () => {
             current: newPagination.current || 1,
             pageSize: newPagination.pageSize || 5,
         }));
-        fetchUsers();
+        fetchTracks();
     };
 
-    const columns: ColumnsType<IUserList> = [
+    const columns: ColumnsType<ITrack> = [
         {
             title: 'ID',
-            dataIndex: 'id',
-            key: 'id',
+            dataIndex: 'track_id',
+            key: 'track_id',
             render: (id) => <a href="#">{id}</a>,
         },
         {
-            title: 'Username',
-            dataIndex: 'user_name',
-            key: 'user_name',
+            title: 'Title',
+            dataIndex: 'title',
+            key: 'title',
         },
         {
-            title: 'Full Name',
-            dataIndex: 'fullname',
-            key: 'fullname',
+            title: 'Artist',
+            dataIndex: 'artist',
+            key: 'artist',
+            render: (artist) => artist?.name || 'N/A',
         },
         {
-            title: 'Email',
-            dataIndex: 'email',
-            key: 'email',
+            title: 'Image',
+            dataIndex: 'image_url',
+            key: 'image_url',
+            render: (image_url) => (
+                <Image
+                    src={image_url}
+                    alt="Track cover"
+                    width={50}
+                    height={50}
+                    style={{ objectFit: 'cover' }}
+                />
+            ),
         },
         {
-            title: 'Phone',
-            dataIndex: 'phone',
-            key: 'phone',
+            title: 'Price',
+            dataIndex: 'price',
+            key: 'price',
+            render: (price) => `$${price || '0.00'}`,
         },
         {
-            title: 'Role',
-            dataIndex: 'role',
-            key: 'role',
+            title: 'Listens',
+            dataIndex: 'listen',
+            key: 'listen',
+            render: (listen) => listen || 0,
         },
         {
             title: 'Action',
@@ -103,15 +112,12 @@ const TableUser = () => {
                     <Button
                         type="text"
                         icon={<EditTwoTone twoToneColor="#f57800" />}
-                        onClick={() => {
-                            setDataUpdate(record);
-                            setOpenModalUpdate(true);
-                        }}
+                        onClick={() => console.log('Edit:', record)}
                     />
                     <Popconfirm
-                        title="Delete User"
-                        description="Are you sure you want to delete this user?"
-                        onConfirm={() => handleDelete(record.id)}
+                        title="Delete Track"
+                        description="Are you sure you want to delete this track?"
+                        onConfirm={() => handleDelete(record.track_id)}
                         okText="Yes"
                         cancelText="No"
                     >
@@ -132,15 +138,15 @@ const TableUser = () => {
                 <Button
                     type="primary"
                     icon={<PlusOutlined />}
-                    onClick={() => setOpenModalCreate(true)}
+                    onClick={() => setIsModalOpen(true)}
                 >
-                    Add User
+                    Add Track
                 </Button>
             </div>
             <Table
                 columns={columns}
-                dataSource={users}
-                rowKey="id"
+                dataSource={tracks}
+                rowKey="track_id"
                 pagination={pagination}
                 loading={loading}
                 onChange={handleTableChange}
@@ -148,20 +154,15 @@ const TableUser = () => {
                     emptyText: 'No Data',
                 }}
             />
-            <CreateUser
-                openModalCreate={openModalCreate}
-                setOpenModalCreate={setOpenModalCreate}
-                refreshTable={fetchUsers}
-            />
-            <UpdateUser
-                openModalUpdate={openModalUpdate}
-                setOpenModalUpdate={setOpenModalUpdate}
-                dataUpdate={dataUpdate}
-                setDataUpdate={setDataUpdate}
-                refreshTable={fetchUsers}
+            <AddTrack
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSuccess={fetchTracks}
+
             />
         </div>
     );
 };
 
-export default TableUser;
+export default TableTrack;
+

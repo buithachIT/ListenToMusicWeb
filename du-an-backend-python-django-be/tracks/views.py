@@ -8,7 +8,6 @@ from albums.models import Albums,Artists
 from rest_framework.decorators import api_view
 from rest_framework.permissions import AllowAny 
 
-
 class CreateTrackView(APIView):
     def post(self, request):
         serializer = TrackSerializer(data=request.data)

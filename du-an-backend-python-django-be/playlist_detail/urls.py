@@ -3,5 +3,5 @@ from .views import *
 
 urlpatterns = [
     path('addtracktoplaylist/', AddTrackToPlaylistView.as_view(), name='addtracktoplaylist'),
-   
+
 ]

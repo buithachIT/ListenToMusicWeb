@@ -1,13 +1,14 @@
-
 import { useCurrentApp } from "../context/app.context";
 import { App, Avatar, Dropdown, Space } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { logoutAPI } from "../../services/api";
+import { useState } from "react";
 
 const Navbar = () => {
     const { isAuthenticated, setIsAuthenticated, user, setUser, setOpenModalPremium } = useCurrentApp();
     const navigate = useNavigate();
     const { message } = App.useApp();
+    const [searchQuery, setSearchQuery] = useState('');
 
     const handleLogout = async () => {
         const res = await logoutAPI();
@@ -18,6 +19,20 @@ const Navbar = () => {
             setUser(null);
         }
     }
+
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (searchQuery.trim()) {
+            navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+            setSearchQuery('');
+        }
+    };
+
+    const handleHomeClick = () => {
+        navigate('/');
+        setSearchQuery('');
+    };
+
     const items = [
         {
             label: <label
@@ -26,21 +41,21 @@ const Navbar = () => {
             >Đăng xuất</label>,
             key: 'logout',
         },
-
     ];
+
     if (user?.role_id == 1) {
         items.unshift({
             label: <Link to='/admin'>Trang quản trị</Link>,
             key: 'admin',
         })
     }
+
     const urlAvatar = `${import.meta.env.VITE_BACKEND_URL}/media/image_thumb/${user?.url_avatar}`;
 
     return (
         <nav className="flex justify-between items-center px-4 py-3 bg-black text-white">
             {/* Left section */}
             <div className="flex items-center space-x-4">
-
                 <img
                     src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
                     alt="Spotify"
@@ -48,7 +63,10 @@ const Navbar = () => {
                 />
 
                 {/* Home icon */}
-                <div className="w-9 h-9 flex items-center justify-center bg-gray-800 rounded-full">
+                <div
+                    onClick={handleHomeClick}
+                    className="w-9 h-9 flex items-center justify-center bg-gray-800 rounded-full cursor-pointer hover:bg-gray-700"
+                >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-5 w-5 text-white"
@@ -60,7 +78,7 @@ const Navbar = () => {
                 </div>
 
                 {/* Search bar */}
-                <div className="flex items-center bg-zinc-800 rounded-full px-4 py-1 w-72">
+                <form onSubmit={handleSearch} className="flex items-center bg-white/10 rounded-full px-4 py-2 flex-1 max-w-md">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-4 w-4 text-gray-400 mr-2"
@@ -77,10 +95,12 @@ const Navbar = () => {
                     </svg>
                     <input
                         type="text"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="What do you want to play?"
                         className="bg-transparent text-white text-sm w-full focus:outline-none"
                     />
-                </div>
+                </form>
             </div>
 
             {/* Right section */}
@@ -113,8 +133,10 @@ const Navbar = () => {
                         </style>
                     </div>
                     :
-
-                    < button className="bg-white text-black text-sm font-semibold px-4 py-1 rounded-full" onClick={() => { setOpenModalPremium(true) }}>
+                    <button
+                        className="bg-white text-black text-sm font-semibold px-4 py-1 rounded-full hover:bg-gray-100 transition-colors"
+                        onClick={() => setOpenModalPremium(true)}
+                    >
                         Explore Premium
                     </button>
                 }
