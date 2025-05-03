@@ -24,6 +24,7 @@ import TableSinger from './components/admin/singer/table.singer.tsx';
 import enUS from 'antd/locale/en_US';
 import SearchPage from './pages/client/search.tsx';
 import PlaylistPage from './pages/client/playlist.tsx';
+import ArtistPage from './pages/client/artist.tsx';
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
       {
         path: "/playlist/:playlistId/:playlistName",
         element: <PlaylistPage />
+      },
+      {
+        path: "/artist/:artistId/:artistName",
+        element: <ArtistPage />
       }
     ]
   },

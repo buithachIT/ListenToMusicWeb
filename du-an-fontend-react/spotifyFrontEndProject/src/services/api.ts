@@ -248,3 +248,9 @@ export const searchByArtistAPI = (query: string) => {
   const urlBackend = `/tracks/search-by-artist/?q=${encodeURIComponent(query)}`;
   return axios.get<IBackendRes<ITrack[]>>(urlBackend);
 };
+
+//Get tracks by artist ID
+export const getTracksByArtistAPI = (artistId: number) => {
+  const urlBackend = `/tracks/getbyartist/${artistId}/`;
+  return axios.get<ITrack[]>(urlBackend);
+};

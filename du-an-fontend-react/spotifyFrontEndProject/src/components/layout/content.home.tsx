@@ -7,14 +7,12 @@ import { useCurrentApp } from '../context/app.context';
 import { Button, Modal } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/global.scss';
+
 const HomeContent = () => {
-
-
     const navigate = useNavigate();
 
-
     //render top artist
-    const [listArtist, setListArtist] = useState<IArtist[]>([])
+    const [listArtist, setListArtist] = useState<IArtist[]>([]);
     useEffect(() => {
         fetchArtist();
     }, []);
@@ -40,7 +38,6 @@ const HomeContent = () => {
         }
     }
 
-
     const { setShowNowPlayingSideBar, user, openModalPremium, setOpenModalPremium } = useCurrentApp();
     const { setCurrentTrack, setIsPlaying, setCurrentIndex, setPlayList } = usePlayer();
     const handleClickTrack = (track: ITrack, index: number) => {
@@ -55,7 +52,6 @@ const HomeContent = () => {
         setShowNowPlayingSideBar(true);
     }
 
-
     //Scroll 
     const scrollRef = useRef<HTMLDivElement | null>(null);
     const scrollLeft = () => {
@@ -66,7 +62,6 @@ const HomeContent = () => {
         scrollRef.current?.scrollBy({ left: 300, behavior: 'smooth' });
     };
 
-
     //handle open/close Premium modal
     const handleCancelPremium = () => {
         setOpenModalPremium(false);
@@ -74,6 +69,10 @@ const HomeContent = () => {
     const handleOkPremium = () => {
         navigate('/premium-checkout')
     }
+
+    const handleArtistClick = (artist: IArtist) => {
+        navigate(`/artist/${artist.artist_id}/${encodeURIComponent(artist.name)}`);
+    };
 
     return (
         <div className='bg-gradient-to-b from-[#191919] to-[#000] pt-5 pl-6'>
@@ -89,7 +88,6 @@ const HomeContent = () => {
                     Podcasts
                 </button>
             </div>
-
 
             <div>
                 {/* Header */}
@@ -158,12 +156,19 @@ const HomeContent = () => {
                         < div className="grid grid-cols-6 mt-5 gap-4" >
                             {listArtist.map((item) => {
                                 return (
-                                    <div key={item.artist_id} className="cursor-pointer hover:bg-[#1a1a1a] p-2 rounded mr-5">
+                                    <div
+                                        key={item.artist_id}
+                                        onClick={() => handleArtistClick(item)}
+                                        className="cursor-pointer hover:bg-[#1a1a1a] p-2 rounded mr-5"
+                                    >
                                         <img src={item.avatar} className="rounded-full mb-2" />
                                         <h3 className="text-sm font-semibold">{item.name}</h3>
-                                        <div className='flex'><p className="text-xs text-gray-400">{item.follower}</p>
-                                            <i className="fa fa-fire ml-1" aria-hidden="true"></i></div>
-                                    </div>)
+                                        <div className='flex'>
+                                            <p className="text-xs text-gray-400">{item.follower}</p>
+                                            <i className="fa fa-fire ml-1" aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                )
                             })}
                         </div >
                     </div >

@@ -5,6 +5,7 @@ import { useCurrentApp } from "./components/context/app.context";
 import { PacmanLoader } from "react-spinners";
 import HomePage from "./pages/client/home";
 import SearchPage from "./pages/client/search";
+import ArtistPage from "./pages/client/artist";
 import PlayerBar from "./components/layout/playbar.bottom";
 import { Routes, Route } from "react-router-dom";
 
@@ -35,6 +36,7 @@ function Layout() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/search" element={<SearchPage />} />
+              <Route path="/artist/:artistId/:artistName" element={<ArtistPage />} />
             </Routes>
           </div>
         </div>
