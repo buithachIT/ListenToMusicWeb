@@ -1,0 +1,69 @@
+#Tạo bảng M1 chứa thông tin các outcome lấy từ sheet CK_0
+M1_2011=c(dataCK_0[7,3:40])
+M1_2012=c(dataCK_0[8,3:40])
+M1_2013=c(dataCK_0[9,3:40])
+M1_2014=c(dataCK_0[10,3:40])
+M1=rbind(M1_2011,M1_2012,M1_2013,M1_2014)
+colnames(M1)=c(1:38)
+rownames(M1)=c(2011:2014)
+for(j in 1:dim(M1)[1]){
+  for(k in 1:dim(M1)[2]){
+    txt_1=paste("LO",M1[j,k],sep="")
+    M1[j,k]=txt_1
+  }
+}
+#Thêm 7 cột outcome vào sheet CK
+dataCK$LO11=0
+dataCK$LO12=0
+dataCK$LO21=0
+dataCK$LO22=0
+dataCK$LO23=0
+dataCK$LO31=0
+dataCK$LO31=0
+dataCK$LO32=0
+
+#Phần tính toán
+
+listMade <- list(2011,2012,2013,2014)
+for (n in listMade)
+  for (k in 1:38)
+    for(m in 1:length(dataCK$No))
+      if(dataCK[m,"MADE"]==n){
+        txt_1 <- M1[n-2010,k]
+        txt_1=toString(txt_1)
+        dataCK[m,txt_1]=dataCK[m,txt_1]+(dataCK[m,k+3]==0)
+      }
+
+#xét outcome LO12, có 13 trường hợp
+scsnn=max(dataCK$LO12)
+Socausai=c(0:scsnn)
+sinhvien=rep(c(0),each=scsnn+1)
+DF=data.frame(Socausai,sinhvien)
+for(i in DF$Socausai)
+  for(j in 1:163)
+    if (dataCK$LO12[j]==i)
+      DF$sinhvien[i+1]=DF$sinhvien[i+1]+1
+
+
+#Chuyển sang tần số tương đối
+
+DF$sinhvien=DF$sinhvien/sum(DF$sinhvien)*100
+
+#Chuyển sang tần số tương đối tích lũy
+
+DF$sinhvien=cumsum(DF$sinhvien)
+
+#Vẽ đồ thị
+
+ggplot(DF, aes(x=Socausai,y=sinhvien)) +
+  geom_bar(stat = "identity",fill = "#1b98e0", colour = "white", alpha= 5) +
+  xlab("Number of Wrong Answers") +
+  ylab("Number of Students") +
+  ggtitle("HISTOGRAM OF SURVIVAL FREQUENCY PERFORMANCE - WRONG NUMBER IN FINAL(LO12)")+
+  scale_y_continuous(breaks = seq(from = 0, to = 100, by = 5)) +
+  scale_x_continuous(breaks = seq(from = 0, to = scsnn, by = 1))
+theme_gray() +
+  theme(
+    plot.title=element_text(family='', face='bold', colour='black', size=15),
+    axis.title.x = element_text(family='', face='bold', colour='skyblue', size=12),
+    axis.title.y = element_text(family='', face='bold', colour='skyblue', size=12))

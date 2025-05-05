@@ -37,6 +37,7 @@ const RegisterForm: React.FC = () => {
     return (
         <div style={{ backgroundColor: "#000", color: "#fff", minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
             <div style={{ width: 450, padding: 32, textAlign: "center" }}>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg" width={50} alt="" />
                 <h2 style={{ color: "#fff", fontSize: "28px" }}>Đăng ký để <br /> bắt đầu nghe</h2>
                 <Form
                     name="register"

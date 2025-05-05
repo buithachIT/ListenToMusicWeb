@@ -1,5 +1,5 @@
 import { App, Button, Divider, Form, FormProps, Input } from "antd";
-import "../client/login.scss"
+import "./login.scss"
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { KeyOutlined, MailOutlined } from "@ant-design/icons";
@@ -43,7 +43,7 @@ const LoginPage = () => {
                     <section className="wrapper">
                         <div className="heading">
                             <img src="https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg" width={50} alt="" />
-                            <h2>Đăng nhập vào Spotify</h2>
+                            <h2 style={{ fontSize: "2rem", fontWeight: "bold" }}>Đăng nhập vào Spotify</h2>
                             <Divider />
                         </div>
                         <Form name="form-login" onFinish={onFinish} autoComplete="off">
