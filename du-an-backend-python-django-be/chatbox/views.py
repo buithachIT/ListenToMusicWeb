@@ -11,41 +11,20 @@ api_key = "AIzaSyDIWoW6Wn049vv6i_Qr0G5eTEqc1Hd7aLg"  # Thay thế với API key 
 client = Client(api_key=api_key)
 PROMPT_HEADER = """
 Schema:
-tracks(track_id, title, album_id → albums.album_id, artist_id → artists.artist_id)
-albums(album_id, title)
-artists(artist_id, name)
+Bạn là một chuyên gia SQL sử dụng tiếng Việt. Dưới đây là lược đồ cơ sở dữ liệu Spotify:
 
-Use aliases:
-  tracks AS t
-  albums AS al
-  artists AS a
-
-Generate only SELECT SQL (no semicolon), use single quotes, no explanation.
-
-# Logic:
-If question mentions “album”, join albums AS al ON t.album_id=al.album_id and filter al.title.
-If question mentions “ca sĩ” or “của <artist>”, join artists AS a ON t.artist_id=a.artist_id and filter a.name.
-
-# Examples:
-Q: "Các bài hát trong album 'Vol 1' là gì?"
-SQL: SELECT t.title
-     FROM tracks AS t
-     JOIN albums AS al ON t.album_id = al.album_id
-     WHERE al.title = 'Vol 1'
-
-Q: "Các bài hát trong album 'Vol 2'?"
-SQL: SELECT t.title
-     FROM tracks AS t
-     JOIN albums AS al ON t.album_id = al.album_id
-     WHERE al.title = 'Vol 2'
-
-Q: "Những bài hát của ca sĩ Sơn Tùng M-TP là gì?"
-SQL: SELECT t.title
-     FROM tracks AS t
-     JOIN artists AS a ON t.artist_id = a.artist_id
-     WHERE a.name = 'Sơn Tùng M-TP'
-
-# Now your question:
+Bảng `users` ()
+Bảng `tracks` (track_id, title,album_id,artist_id,listen)
+Bảng `albums` (album_id, title, deception,total_tracks, artist_id)
+Bảng `artists` (artist_id, name, gener, follower, populariy_score)
+Bảng `playlists` (name)
+Sử dụng bí danh:
+theo dõi AS t
+album AS al
+artist AS a
+Với sơ đồ này, hãy viết câu lệnh MySQL để trả lời câu hỏi sau
+Chỉ tạo SELECT SQL (không có dấu chấm phẩy), sử dụng dấu ngoặc kép, không giải thích.
+Có thể dùng các so sánh linh hoạt.
 Q: "{question}"
 SQL:
 """
@@ -88,10 +67,34 @@ def chat_view(request):
             if sql.startswith("SELECT"):
                 # Thực thi câu lệnh SQL nếu là SELECT
                 result = execute_sql(sql)
-                return JsonResponse({"sql": sql, "result": result})
+                answer = generate_answer_from_result(question, sql, result)
+                return JsonResponse({
+                    "sql": sql,
+                    "result": result,
+                    "answer": answer
+                })
             else:
-                return JsonResponse({"error": "Câu lệnh SQL không hợp lệ.","sql": sql}, status=400)
+                return JsonResponse({"answer": "Mình là một AI chỉ có thể hiển thị tìm kiếm các thông tin cho bạn, các hành động gây ảnh hưởng đến dữ liệu mình không làm được .","sql": sql}, status=400)
         except Exception as e:
             return JsonResponse({"error": str(e),"sql": sql}, status=500)
 
     return JsonResponse({"error": "Only POST method allowed"}, status=405)
+def generate_answer_from_result(question, sql, result):
+    try:
+        prompt = f"""
+Câu hỏi: {question}
+SQL đã dùng: {sql}
+Kết quả truy vấn: {result}
+
+Hãy trả lời câu hỏi trên bằng tiếng Việt có cảm xúc, thân thiện và lịch sự dựa vào kết quả truy vấn.
+Chỉ trả lời ngắn gọn, đúng vào nội dung, không giải thích SQL.
+Đừng đưa các biến id, hoặc trả lời liên quan đến dữ liệu
+
+"""
+        response = client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=prompt
+        )
+        return response.text.strip()
+    except Exception as e:
+        return f"Không thể tạo câu trả lời ngôn ngữ tự nhiên: {str(e)}"
