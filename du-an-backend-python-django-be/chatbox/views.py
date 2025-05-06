@@ -6,19 +6,20 @@ from django.db import connection
 # Đặt API key từ Google GenAI
 api_key = "AIzaSyDIWoW6Wn049vv6i_Qr0G5eTEqc1Hd7aLg"  # Thay thế với API key từ Google
 
+
 # Tạo một client cho Google GenAI
 client = Client(api_key=api_key)
 PROMPT_HEADER = """
 Schema:
-tracks(track_id, title, album_id → albums.album_id, artist_id → artists.artist_id,listen)
+tracks(track_id, title, album_id → albums.album_id, artist_id → artists.artist_id)
 albums(album_id, title)
-artists(artist_id, name,follower,genner,popularity_score)
+artists(artist_id, name)
 
 Use aliases:
   tracks AS t
   albums AS al
   artists AS a
-FOR MYSQL
+
 Generate only SELECT SQL (no semicolon), use single quotes, no explanation.
 
 # Logic:
@@ -37,6 +38,7 @@ SQL: SELECT t.title
      FROM tracks AS t
      JOIN albums AS al ON t.album_id = al.album_id
      WHERE al.title = 'Vol 2'
+
 Q: "Những bài hát của ca sĩ Sơn Tùng M-TP là gì?"
 SQL: SELECT t.title
      FROM tracks AS t
@@ -86,33 +88,10 @@ def chat_view(request):
             if sql.startswith("SELECT"):
                 # Thực thi câu lệnh SQL nếu là SELECT
                 result = execute_sql(sql)
-                answer = generate_answer_from_result(question, sql, result)
-                return JsonResponse({
-                    "sql": sql,
-                    "result": result,
-                    "answer": answer
-                })
+                return JsonResponse({"sql": sql, "result": result})
             else:
                 return JsonResponse({"error": "Câu lệnh SQL không hợp lệ.","sql": sql}, status=400)
         except Exception as e:
             return JsonResponse({"error": str(e),"sql": sql}, status=500)
 
     return JsonResponse({"error": "Only POST method allowed"}, status=405)
-
-def generate_answer_from_result(question, sql, result):
-    try:
-        prompt = f"""
-Câu hỏi: {question}
-SQL đã dùng: {sql}
-Kết quả truy vấn: {result}
-
-Hãy trả lời câu hỏi trên bằng tiếng Việt có cảm xúc và lịch sự dựa vào kết quả truy vấn.
-Chỉ trả lời ngắn gọn, đúng vào nội dung, không giải thích SQL.
-"""
-        response = client.models.generate_content(
-            model="gemini-2.0-flash",
-            contents=prompt
-        )
-        return response.text.strip()
-    except Exception as e:
-        return f"Không thể tạo câu trả lời ngôn ngữ tự nhiên: {str(e)}"
