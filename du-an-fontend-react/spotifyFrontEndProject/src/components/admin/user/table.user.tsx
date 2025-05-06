@@ -1,136 +1,167 @@
-import { EditTwoTone, DeleteTwoTone } from '@ant-design/icons';
-import type { ActionType, ProColumns } from '@ant-design/pro-components';
-import { Popconfirm } from 'antd';
-import { getAllUsersAPI } from '../../../services/api';
-import { useRef, useState } from 'react';
-import { ProTable } from '@ant-design/pro-components';
-
-interface IUserList {
-    id: number;
-    user_name: string;
-    fullname: string;
-    email: string;
-    phone: number;
-    image_user: string;
-    is_superuser: number;
-    url_avatar: string;
-    role: string;
-}
-
-type TSearch = {
-    fullName: string;
-    email: string;
-    createdAt: string;
-    createdAtRange: string;
-}
+import { EditTwoTone, DeleteTwoTone, PlusOutlined } from '@ant-design/icons';
+import { Table, Popconfirm, Button, Space, message } from 'antd';
+import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
+import { useEffect, useState } from 'react';
+import { getAllUsersAPI, deleteUserAPI } from '../../../services/api';
+import CreateUser from './create.user';
+import UpdateUser from './update.user';
+import { AxiosError } from 'axios';
 
 const TableUser = () => {
-    const actionRef = useRef<ActionType>(null);
-    const [meta, setMeta] = useState({
+    const [users, setUsers] = useState<IUserList[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [openModalCreate, setOpenModalCreate] = useState(false);
+    const [openModalUpdate, setOpenModalUpdate] = useState(false);
+    const [dataUpdate, setDataUpdate] = useState<IUserList | null>(null);
+    const [pagination, setPagination] = useState<TablePaginationConfig>({
         current: 1,
         pageSize: 5,
-        pages: 0,
-        total: 0
+        total: 0,
     });
 
-    const columns: ProColumns<IUserList>[] = [
+    const fetchUsers = async () => {
+        setLoading(true);
+        try {
+            const res = await getAllUsersAPI();
+            if (res?.data) {
+                setUsers(res.data);
+                setPagination(prev => ({
+                    ...prev,
+                    total: res.data?.length || 0,
+                }));
+            }
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        }
+        setLoading(false);
+    };
+
+    const handleDelete = async (id: number) => {
+        try {
+            await deleteUserAPI(id);
+            message.success('User deleted successfully');
+            fetchUsers();
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                message.error(error.response?.data?.message || 'Failed to delete user');
+            } else {
+                message.error('Failed to delete user');
+            }
+        }
+    };
+
+    useEffect(() => {
+        fetchUsers();
+    }, []);
+
+    const handleTableChange = (newPagination: TablePaginationConfig) => {
+        setPagination(prev => ({
+            ...prev,
+            current: newPagination.current || 1,
+            pageSize: newPagination.pageSize || 5,
+        }));
+        fetchUsers();
+    };
+
+    const columns: ColumnsType<IUserList> = [
         {
-            dataIndex: 'index',
-            valueType: 'indexBorder',
-            width: 48,
-        },
-        {
-            title: 'Id',
+            title: 'ID',
             dataIndex: 'id',
-            hideInSearch: true,
-            render(_, entity) {
-                return (
-                    <a href='#'>{entity.id}</a>
-                )
-            },
+            key: 'id',
+            render: (id) => <a href="#">{id}</a>,
         },
         {
             title: 'Username',
             dataIndex: 'user_name',
+            key: 'user_name',
         },
         {
             title: 'Full Name',
             dataIndex: 'fullname',
+            key: 'fullname',
         },
         {
             title: 'Email',
             dataIndex: 'email',
-            copyable: true
+            key: 'email',
         },
         {
             title: 'Phone',
             dataIndex: 'phone',
+            key: 'phone',
         },
         {
             title: 'Role',
             dataIndex: 'role',
+            key: 'role',
         },
         {
             title: 'Action',
-            hideInSearch: true,
-            render() {
-                return (
-                    <>
-                        <EditTwoTone
-                            twoToneColor="#f57800"
-                            style={{ cursor: "pointer", marginRight: 15 }}
+            key: 'action',
+            render: (_, record) => (
+                <Space size="middle">
+                    <Button
+                        type="text"
+                        icon={<EditTwoTone twoToneColor="#f57800" />}
+                        onClick={() => {
+                            setDataUpdate(record);
+                            setOpenModalUpdate(true);
+                        }}
+                    />
+                    <Popconfirm
+                        title="Delete User"
+                        description="Are you sure you want to delete this user?"
+                        onConfirm={() => handleDelete(record.id)}
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                        <Button
+                            type="text"
+                            danger
+                            icon={<DeleteTwoTone twoToneColor="#ff4d4f" />}
                         />
-                        <Popconfirm
-                            placement="leftTop"
-                            title={"Xác nhận xóa user"}
-                            description={"Bạn có chắc chắn muốn xóa user này ?"}
-                            okText="Xác nhận"
-                            cancelText="Hủy"
-                        >
-                            <span style={{ cursor: "pointer", marginLeft: 20 }}>
-                                <DeleteTwoTone
-                                    twoToneColor="#ff4d4f"
-                                    style={{ cursor: "pointer" }}
-                                />
-                            </span>
-                        </Popconfirm>
-                    </>
-                )
-            }
-        }
+                    </Popconfirm>
+                </Space>
+            ),
+        },
     ];
 
     return (
-        <>
-            <div>Bảng nè</div>
-            <ProTable<IUserList, TSearch>
+        <div>
+            <div style={{ marginBottom: 16 }}>
+                <Button
+                    type="primary"
+                    icon={<PlusOutlined />}
+                    onClick={() => setOpenModalCreate(true)}
+                >
+                    Add User
+                </Button>
+            </div>
+            <Table
                 columns={columns}
-                actionRef={actionRef}
-                cardBordered
-                request={async (params, sort, filter) => {
-                    const res = await getAllUsersAPI();
-                    if (res.data) {
-                        setMeta(res.data.meta);
-                    }
-                    return {
-                        data: res.data?.result,
-                        page: 1,
-                        success: true,
-                        total: res.data?.meta.total
-                    }
-                }}
+                dataSource={users}
                 rowKey="id"
-                pagination={{
-                    current: meta.current,
-                    pageSize: meta.pageSize,
-                    showSizeChanger: true,
-                    total: meta.total,
-                    showTotal: (total, range) => { return (<div> {range[0]}-{range[1]} trên {total} rows</div>) }
+                pagination={pagination}
+                loading={loading}
+                onChange={handleTableChange}
+                locale={{
+                    emptyText: 'No Data',
                 }}
-                headerTitle="Table user"
             />
-        </>
-    )
-}
+            <CreateUser
+                openModalCreate={openModalCreate}
+                setOpenModalCreate={setOpenModalCreate}
+                refreshTable={fetchUsers}
+            />
+            <UpdateUser
+                openModalUpdate={openModalUpdate}
+                setOpenModalUpdate={setOpenModalUpdate}
+                dataUpdate={dataUpdate}
+                setDataUpdate={setDataUpdate}
+                refreshTable={fetchUsers}
+            />
+        </div>
+    );
+};
 
 export default TableUser;

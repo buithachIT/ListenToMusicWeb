@@ -38,7 +38,7 @@ urlpatterns = [
     path('addablum/',CreateAlbumView.as_view(),name='ablum'),
     path('deletetrack/<int:track_id>/', DeleteTrackView.as_view(), name='delete-track'),
     path('deletealbum/<int:album_id>/', DeleteAlbumView.as_view(), name='delete-album'),
- 
+    path('chatbox/', include('chatbox.urls')),
 ]
 # Chỉ thêm khi ở chế độ debug
 if settings.DEBUG:

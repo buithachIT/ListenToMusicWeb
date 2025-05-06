@@ -1,107 +1,102 @@
-// import { createUserAPI } from "../../../services/api";
-// import { App, Divider, Form, FormProps, Input, Modal, notification } from "antd";
-// import FormItem from "antd/es/form/FormItem";
+import { createUserAPI } from "../../../services/api";
+import { App, Divider, Form, FormProps, Input, Modal, notification } from "antd";
+import FormItem from "antd/es/form/FormItem";
 
+type FieldType = {
+    fullName: string;
+    password: string;
+    email: string;
+    phone: string;
+}
 
-// type FieldType = {
+interface IProps {
+    openModalCreate: boolean;
+    setOpenModalCreate: (v: boolean) => void;
+    refreshTable: () => void;
+}
 
-//     fullName: string;
-//     password: string;
-//     email: string;
-//     phone: string;
+const CreateUser = (props: IProps) => {
+    const { openModalCreate, setOpenModalCreate, refreshTable } = props;
+    const [form] = Form.useForm();
+    const { message } = App.useApp();
 
-// }
-// interface IProps {
-//     openModalCreate: boolean;
-//     setOpenModalCreate: (v: boolean) => void;
-//     refreshTable: () => void;
-// }
-// const CreateUser = (props: IProps) => {
-//     const { openModalCreate, setOpenModalCreate, refreshTable } = props;
-//     const [form] = Form.useForm();
-//     const { message } = App.useApp();
+    const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
+        const { fullName, password, email, phone } = values;
+        console.log("Form values:", values);
+        const res = await createUserAPI(fullName, password, email, phone);
+        if (res && res.data) {
+            message.success("User created successfully");
+            form.resetFields();
+            setOpenModalCreate(false);
+            refreshTable();
+        } else {
+            message.error(res.message);
+        }
+    }
 
-//     const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
-//         const { fullName, password, email, phone } = values;
-//         console.log("cheekc value>>>.", values);
-//         const res = await createUserAPI(fullName, password, email, phone);
-//         if (res && res.data) {
-//             message.success("Tạo mới thành công");
-//             form.resetFields();
-//             setOpenModalCreate(false)
-//             refreshTable();
-//         }
-//         else {
-//             notification.error({
-//                 message: "Tạo mới thất bại",
-//                 description: res.message || "Lỗi hệ thống"
-//             });
-//         }
-//     }
+    return (
+        <Modal
+            title="Create New User"
+            open={openModalCreate}
+            onCancel={() => {
+                setOpenModalCreate(false);
+            }}
+            okText="Create"
+            onOk={() => { form.submit() }}
+            cancelText="Cancel"
+        >
+            <Divider />
+            <Form
+                form={form}
+                name="create-user"
+                style={{ maxWidth: 600 }}
+                onFinish={onFinish}
+                autoComplete="off"
+                layout="vertical"
+            >
+                <FormItem<FieldType>
+                    label="Display Name"
+                    name="fullName"
+                    rules={[{ required: true, message: 'Please enter display name!' }]}
+                >
+                    <Input placeholder="Enter display name" />
+                </FormItem>
 
-//     return (
-//         <Modal
+                <FormItem<FieldType>
+                    label="Password"
+                    name="password"
+                    rules={[
+                        { required: true, message: 'Please enter password!' },
+                        { min: 6, message: 'Password must be at least 6 characters!' }
+                    ]}
+                >
+                    <Input.Password placeholder="Enter password" />
+                </FormItem>
 
-//             title="Thêm mới người dùng"
-//             open={openModalCreate}
-//             onCancel={() => {
-//                 setOpenModalCreate(false);
+                <FormItem<FieldType>
+                    label="Email"
+                    name="email"
+                    rules={[
+                        { required: true, message: 'Please enter email!' },
+                        { type: 'email', message: 'Please enter a valid email address!' }
+                    ]}
+                >
+                    <Input placeholder="Enter email" />
+                </FormItem>
 
-//             }}
-//             okText="Tạo mới"
-//             onOk={() => { form.submit() }}
-//             cancelText="Hủy"
-//         >
-//             <Divider />
-//             <Form
-//                 form={form}
-//                 name="basic"
-//                 style={{ maxWidth: 600 }}
-//                 onFinish={onFinish}
-//                 autoComplete="off"
-//             >
+                <FormItem<FieldType>
+                    label="Phone Number"
+                    name="phone"
+                    rules={[
+                        { required: true, message: 'Please enter phone number!' },
+                        { pattern: /^[0-9]+$/, message: 'Please enter only numbers!' }
+                    ]}
+                >
+                    <Input placeholder="Enter phone number" />
+                </FormItem>
+            </Form>
+        </Modal>
+    );
+};
 
-//                 <FormItem<FieldType>
-//                     labelCol={{ span: 24 }}
-//                     label="Tên hiện thị"
-//                     name="fullName"
-//                     rules={[{ required: true, message: 'Vui lòng nhập tên hiển thị!' }]}
-//                 >
-//                     <Input />
-//                 </FormItem>
-
-//                 <FormItem<FieldType>
-//                     labelCol={{ span: 24 }}
-//                     label="Password"
-//                     name="password"
-//                     rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
-//                 >
-//                     <Input />
-//                 </FormItem>
-
-//                 <FormItem<FieldType>
-//                     labelCol={{ span: 24 }}
-//                     label="Email"
-//                     name="email"
-//                     rules={[
-//                         { required: true, message: 'Vui lòng nhập email!' },
-//                         { type: 'email', message: 'Vui lòng nhập đúng định dạng email' }
-//                     ]}
-//                 >
-//                     <Input />
-//                 </FormItem>
-
-//                 <FormItem<FieldType>
-//                     labelCol={{ span: 24 }}
-//                     label="Số điện thoại"
-//                     name="phone"
-//                     rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}
-//                 >
-//                     <Input />
-//                 </FormItem >
-//             </Form >
-//         </Modal >
-//     );
-// };
-
-// export default CreateUser;
+export default CreateUser;

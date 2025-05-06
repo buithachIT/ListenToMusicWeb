@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useCurrentApp } from "../context/app.context";
 import { createPlaylistAPI, getPlaylistAPI } from "../../services/api";
 import { useAlbum } from "../context/album.context";
+import { useNavigate } from "react-router-dom";
 
 type FieldType = {
     name: string;
@@ -17,6 +18,7 @@ const Sidebar = () => {
     const { user, isAuthenticated } = useCurrentApp();
     const [form] = Form.useForm();
     const { message } = App.useApp();
+    const navigate = useNavigate();
 
     const refreshPlaylist = async () => {
         if (!user?.id) return;
@@ -56,6 +58,11 @@ const Sidebar = () => {
             })
         }
     }, [user])
+
+    const handlePlaylistClick = (playlist: IPlaylist) => {
+        navigate(`/playlist/${playlist.playlist_id}/${encodeURIComponent(playlist.name)}`);
+    };
+
     return (
         <>
             <div>
@@ -81,9 +88,13 @@ const Sidebar = () => {
                     {(isAuthenticated) ?
                         <div className="overflow-y-auto flex-1 space-y-2 mt-2 pr-2">
                             {albums?.map((item, index) => (
-                                <div key={index} className="flex gap-3 items-center p-2 hover:bg-zinc-800 rounded cursor-pointer">
+                                <div
+                                    key={index}
+                                    className="flex gap-3 items-center p-2 hover:bg-zinc-800 rounded cursor-pointer"
+                                    onClick={() => handlePlaylistClick(item)}
+                                >
                                     <div className="w-10 h-10 bg-zinc-700 rounded shadow flex items-center justify-center">
-                                        <i className="fa-solid fas  fa-compact-disc" />
+                                        <i className="fa-solid fas fa-compact-disc" />
                                     </div>
                                     <div>
                                         <div className="text-sm font-medium truncate">{item.name}</div>

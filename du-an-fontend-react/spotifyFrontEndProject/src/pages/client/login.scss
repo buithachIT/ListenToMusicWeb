@@ -16,6 +16,8 @@
 h2 {
     color: white;
     justify-content: center;
+    font-weight: 700 !important;
+    font-size: 2rem;
 }
 
 .login-container {
@@ -81,6 +83,11 @@ h2 {
                 width: 100%;
                 margin: 0 auto;
                 text-align: center;
+                font-weight: bold;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
             }
             .form {
                 width: 100%;

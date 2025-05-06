@@ -5,6 +5,7 @@ export interface IPlaylist {
     playlist_id: number;
     name: string;
     user?: IUser;
+    userid?: string;
 }
 
 // Context type
