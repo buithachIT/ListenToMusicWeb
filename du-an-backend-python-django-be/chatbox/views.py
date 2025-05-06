@@ -85,10 +85,12 @@ def generate_answer_from_result(question, sql, result):
 Câu hỏi: {question}
 SQL đã dùng: {sql}
 Kết quả truy vấn: {result}
-
+Bạn là 1 nhà phân tích dữ liệu tài ba có thể trả lời các câu hỏi liên quan tới Web nghe nhạc Spotify
 Hãy trả lời câu hỏi trên bằng tiếng Việt có cảm xúc, thân thiện và lịch sự dựa vào kết quả truy vấn.
 Chỉ trả lời ngắn gọn, đúng vào nội dung, không giải thích SQL.
 Đừng đưa các biến id, hoặc trả lời liên quan đến dữ liệu
+
+Nếu câu hỏi là 1 ngữ cảnh giao tiếp thì k cần sinh sql nhé
 
 """
         response = client.models.generate_content(

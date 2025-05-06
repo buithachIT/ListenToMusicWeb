@@ -7,17 +7,40 @@ from .models import Tracks
 from albums.models import Albums,Artists
 from rest_framework.decorators import api_view
 from rest_framework.permissions import AllowAny 
-
+from rest_framework.parsers import MultiPartParser, FormParser
+from django.conf import settings
+from django.core.files.storage import default_storage
 class CreateTrackView(APIView):
+    parser_classes = [MultiPartParser, FormParser]
+
     def post(self, request):
-        serializer = TrackSerializer(data=request.data)
+        data = request.data.copy()
+
+        # Xử lý file image
+        image_file = request.FILES.get('image')
+        if image_file:
+            image_path = default_storage.save(f'image_thumnb/{image_file.name}', image_file)
+            data['image_url'] = default_storage.url(image_path)
+
+        # Xử lý file mp3
+        mp3_file = request.FILES.get('mp3')
+        if mp3_file:
+            mp3_path = default_storage.save(f'music_file/{mp3_file.name}', mp3_file)
+            data['namemp3'] = mp3_file.name  # hoặc lưu url(mp3_path) nếu bạn muốn link đầy đủ
+
+        # Xử lý file mv (video)
+        mv_file = request.FILES.get('mv')
+        if mv_file:
+            mv_path = default_storage.save(f'mv_file/{mv_file.name}', mv_file)
+            data['mv_url'] = default_storage.url(mv_path)
+
+        serializer = TrackSerializer(data=data)
         if serializer.is_valid():
             track = serializer.save()
             response_serializer = TrackSerializer(track)
+            return Response({"message": "Thêm bài hát thành công!", "data": response_serializer.data, "status": status.HTTP_201_CREATED}, status=status.HTTP_201_CREATED)
 
-            return Response({"message": "Thêm bài hát thành công!", "data": response_serializer.data,"status": status.HTTP_201_CREATED}, status=status.HTTP_201_CREATED)
         return Response({"message": serializer.errors, "status": status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
-
 class DeleteTrackView(APIView):
     def delete(self, request, track_id):
         try:
