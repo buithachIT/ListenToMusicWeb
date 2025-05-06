@@ -43,7 +43,6 @@ const HomeContent = () => {
 
     const { setShowNowPlayingSideBar, user, openModalPremium, setOpenModalPremium } = useCurrentApp();
     const { setCurrentTrack, setIsPlaying, setCurrentIndex, setPlayList } = usePlayer();
-    console.log("Check premium>>", user)
     const handleClickTrack = (track: ITrack, index: number) => {
         if (track.is_copyright && !user?.is_superuser == true) {
             setOpenModalPremium(true);

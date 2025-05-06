@@ -48,9 +48,6 @@ export const AppProvider = (props: TProps) => {
         init();
     }, []);
 
-    console.log("Check user in context>>", user)
-    console.log("AppProvider mounted", isAuthenticated, user);
-
     return (
         <>
             {isAppLoading === false ?

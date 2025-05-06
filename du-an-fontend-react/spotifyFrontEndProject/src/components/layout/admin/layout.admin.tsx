@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import {
     AppstoreOutlined,
-    ExceptionOutlined,
     HeartTwoTone,
     TeamOutlined,
     UserOutlined,
-    DollarCircleOutlined,
     MenuFoldOutlined,
     MenuUnfoldOutlined,
+    CustomerServiceOutlined,
+    StarOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, Dropdown, Space } from 'antd';
 import { Outlet } from "react-router-dom";
@@ -55,16 +55,15 @@ const LayoutAdmin = () => {
             ]
         },
         {
-            label: <Link to='/admin/book'>Manage Books</Link>,
-            key: 'book',
-            icon: <ExceptionOutlined />
+            label: <Link to='/admin/book'>Manage tracks</Link>,
+            key: 'track',
+            icon: <CustomerServiceOutlined />
         },
         {
-            label: <Link to='/admin/order'>Manage Orders</Link>,
-            key: 'order',
-            icon: <DollarCircleOutlined />
+            label: <Link to='/admin/order'>Manage singers</Link>,
+            key: 'singer',
+            icon: <StarOutlined />
         },
-
     ];
 
     const itemsDropdown = [
