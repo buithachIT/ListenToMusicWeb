@@ -140,7 +140,7 @@ export const addToPlaylistAPI = (playlist_id: number, track_id: number) => {
 };
 //get tracks from playlist
 export const getPlaylistTracksAPI = (playlist_id: number) => {
-  const urlBackend = `/playlists/playlists/${playlist_id}/`;
+  const urlBackend = `/playlists/${playlist_id}/`;
   return axios.get<IBackendRes<ITrack[]>>(urlBackend);
 };
 //Delete track
