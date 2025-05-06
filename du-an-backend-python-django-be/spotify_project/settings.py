@@ -177,3 +177,5 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True
+MEDIA_URL = '/public/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'public')
