@@ -79,11 +79,11 @@ const Sidebar = () => {
                     </div>
 
                     {/* Filter Tabs */}
-                    <div className="flex gap-2 mb-3">
+                    {/* <div className="flex gap-2 mb-3">
                         <button onClick={() => setActiveTab("playlist")} className={`px-3 py-1 rounded-full text-sm ${activeTab === "playlist" ? "bg-white text-black" : "bg-zinc-800"}`}>Danh sách phát</button>
                         <button onClick={() => setActiveTab("artist")} className={`px-3 py-1 rounded-full text-sm ${activeTab === "artist" ? "bg-white text-black" : "bg-zinc-800"}`}>Nghệ sĩ</button>
                         <button onClick={() => setActiveTab("album")} className={`px-3 py-1 rounded-full text-sm ${activeTab === "album" ? "bg-white text-black" : "bg-zinc-800"}`}>Album</button>
-                    </div>
+                    </div> */}
                     {/* List items */}
                     {(isAuthenticated) ?
                         <div className="overflow-y-auto flex-1 space-y-2 mt-2 pr-2">

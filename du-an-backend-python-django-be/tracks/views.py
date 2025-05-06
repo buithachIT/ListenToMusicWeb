@@ -72,7 +72,7 @@ class ListTrackTopView(APIView):
 class Top10TrackView(APIView):
     permission_classes = [AllowAny]
     def get(self, request):
-        tracks = Tracks.objects.all().order_by('-listen')[:10]
+        tracks = Tracks.objects.all().order_by('-listen')[:8]
         serializer = TrackSerializer(tracks, many=True)
         return Response({
             "data": serializer.data,

@@ -2,12 +2,12 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import PlaylistSerializer, TrackSerializer
+from .serializers import PlaylistSerializer
 from albums.models import Albums,Artists
 from rest_framework.decorators import api_view
 from rest_framework.permissions import AllowAny
 from playlists.models import Playlists
-from tracks.models import Tracks
+
 class CreatePlaylistView(APIView):
     def post(self, request):
         serializer = PlaylistSerializer(data=request.data)
@@ -35,24 +35,3 @@ class ListPlaylistView(APIView):
             "data": serializer.data,
             "status": status.HTTP_200_OK
         }, status=status.HTTP_200_OK)
-
-class PlaylistTracksView(APIView):
-    permission_classes = [AllowAny]
-
-    def get(self, request, pk):
-        try:
-            playlist = Playlists.objects.get(pk=pk)
-        except Playlists.DoesNotExist:
-            return Response(
-                {"message": "Không tìm thấy playlist!", "status": status.HTTP_404_NOT_FOUND},
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        # ❌ Không dùng filter(playlist_id=pk)
-        tracks = playlist.tracks.all()  # ✅
-
-        serializer = TrackSerializer(tracks, many=True)
-        return Response(
-            {"message": "Lấy danh sách bài hát thành công!", "data": serializer.data, "status": status.HTTP_200_OK},
-            status=status.HTTP_200_OK
-        )
