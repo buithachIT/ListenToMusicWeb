@@ -27,14 +27,22 @@ const ChatBox = ({ isOpen, onClose }: ChatBoxProps) => {
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
-
+    useEffect(() => {
+        if (messages.length) {
+            localStorage.setItem('chat_history', JSON.stringify(messages));
+        }
+    }, [messages]);
     useEffect(() => {
         if (isOpen) {
-            const welcomeMessage: Message = {
-                type: 'ai',
-                content: 'Xin chào! Tôi là trợ lý AI của Spotify. Tôi có thể giúp bạn tìm kiếm bài hát, nghệ sĩ hoặc album. Bạn muốn tìm gì?'
-            };
-            setMessages([welcomeMessage]);
+            const saved = localStorage.getItem('chat_history');
+            if (saved) {
+                setMessages(JSON.parse(saved));
+            } else {
+                setMessages([{
+                    type: 'ai',
+                    content: 'Xin chào! Tôi là trợ lý AI của Spotify. Tôi có thể giúp bạn tìm kiếm bài hát, nghệ sĩ hoặc album. Bạn muốn tìm gì?'
+                }]);
+            }
         }
     }, [isOpen]);
 
@@ -52,7 +60,7 @@ const ChatBox = ({ isOpen, onClose }: ChatBoxProps) => {
 
         try {
             const response = await axios.post('http://localhost:8000/chatbox/', {
-                question: inputValue
+                question: inputValue,
             });
 
             // Add AI response
