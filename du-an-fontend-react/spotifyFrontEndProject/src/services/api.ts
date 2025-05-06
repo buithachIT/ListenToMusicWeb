@@ -73,7 +73,12 @@ export const deleteUserAPI = (id: number) => {
 };
 //Get top music
 export const getTrackAPI = () => {
-  const urlBackend = "/tracks/toptrack/";
+  const urlBackend = "/tracks/top10track/";
+  return axios.get<IBackendRes<ITrack[]>>(urlBackend);
+};
+//get all tracks
+export const getAllTracksAPI = () => {
+  const urlBackend = "/tracks/list/";
   return axios.get<IBackendRes<ITrack[]>>(urlBackend);
 };
 //Create track
@@ -135,7 +140,7 @@ export const addToPlaylistAPI = (playlist_id: number, track_id: number) => {
 };
 //get tracks from playlist
 export const getPlaylistTracksAPI = (playlist_id: number) => {
-  const urlBackend = `/playlist_detail/tracks/${playlist_id}/`;
+  const urlBackend = `/playlists/playlists/${playlist_id}/`;
   return axios.get<IBackendRes<ITrack[]>>(urlBackend);
 };
 //Delete track

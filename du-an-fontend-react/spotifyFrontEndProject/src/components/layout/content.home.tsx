@@ -1,5 +1,5 @@
 import 'simplebar-react/dist/simplebar.min.css';
-import { getTopArtistAPI, getTrackAPI } from '../../services/api';
+import { getAllTracksAPI, getTopArtistAPI, getTrackAPI } from '../../services/api';
 import { useEffect, useRef, useState } from 'react';
 import { usePlayer } from '../context/player.context';
 import SimpleBar from 'simplebar-react';
@@ -10,7 +10,7 @@ import '../../styles/global.scss';
 
 const HomeContent = () => {
     const navigate = useNavigate();
-
+    const { showAll, setShowAll } = useState(false);
     //render top artist
     const [listArtist, setListArtist] = useState<IArtist[]>([]);
     useEffect(() => {
@@ -37,7 +37,12 @@ const HomeContent = () => {
             setListTrack(res.data);
         }
     }
-
+    const handleGetAllTracks = async () => {
+        const res = await getAllTracksAPI();
+        if (res.data) {
+            setListTrack(res.data);
+        }
+    }
     const { setShowNowPlayingSideBar, user, openModalPremium, setOpenModalPremium } = useCurrentApp();
     const { setCurrentTrack, setIsPlaying, setCurrentIndex, setPlayList } = usePlayer();
     const handleClickTrack = (track: ITrack, index: number) => {
@@ -77,7 +82,7 @@ const HomeContent = () => {
     return (
         <div className='bg-gradient-to-b from-[#191919] to-[#000] pt-5 pl-6'>
 
-            <div className="flex gap-2 mb-5">
+            {/* <div className="flex gap-2 mb-5">
                 <button className="bg-white text-black font-semibold px-4 py-1 rounded-full">
                     Tất cả
                 </button>
@@ -87,15 +92,14 @@ const HomeContent = () => {
                 <button className="bg-[#2a2a2a] text-white px-4 py-1 rounded-full hover:bg-[#3a3a3a]">
                     Podcasts
                 </button>
-            </div>
-
+            </div> */}
             <div>
                 {/* Header */}
                 < div className="flex justify-between items-center" >
                     <h1 className="text-2xl font-bold">Popular SONGS</h1>
-                    <button className="text-sm text-gray-400 hover:underline font-bold text-xs mr-3">Show all</button>
+                    <button className="text-sm text-gray-400 hover:underline font-bold text-xs mr-3" onClick={handleGetAllTracks}>Show all</button>
                 </div>
-                <div className="relative">
+                <div className="relative mt-4">
                     <SimpleBar forceVisible="x" autoHide={false} scrollableNodeProps={{ ref: scrollRef }}>
                         <div className="flex gap-4 px-2">
                             {listTrack.map((item, index) => (
@@ -148,7 +152,7 @@ const HomeContent = () => {
                 {/* Header */}
                 <div className="flex gap-4 mt-5 justify-between overflow-x-auto pt-2">
                     <h1 className="text-2xl font-bold">Popular SINGER</h1>
-                    <button className="text-sm text-gray-400 hover:underline font-bold text-xs mr-3">Show all</button>
+                    <button className="text-sm text-gray-400 hover:underline font-bold text-xs mr-3" onClick={() => handleGetAllTracks()}>{showAll ? "Show less" : "Show all"}</button>
                 </div >
                 <SimpleBar forceVisible="x" autoHide={false}>
                     <div className="space-y-10 mt-6 mb-5" >
@@ -217,7 +221,7 @@ const HomeContent = () => {
                 </div>
             </Modal>
 
-        </div>
+        </div >
 
     );
 }
