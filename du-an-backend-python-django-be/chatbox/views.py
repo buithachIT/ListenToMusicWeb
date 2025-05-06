@@ -6,6 +6,7 @@ from django.db import connection
 # Đặt API key từ Google GenAI
 api_key = "AIzaSyDIWoW6Wn049vv6i_Qr0G5eTEqc1Hd7aLg"  # Thay thế với API key từ Google
 
+
 # Tạo một client cho Google GenAI
 client = Client(api_key=api_key)
 PROMPT_HEADER = """
