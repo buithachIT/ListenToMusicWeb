@@ -2,22 +2,23 @@ import axios from "axios";
 
 const instance = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL,
-  withCredentials: true
+  withCredentials: true,
 });
 
-
-
 // Add a request interceptor
-instance.interceptors.request.use(function (config) {
-  // Do something before request is sent
-  const token = localStorage.getItem('access_token');
-    const auth = token ? `Bearer ${token}` : '';
-    config.headers['Authorization'] = auth;
+instance.interceptors.request.use(
+  function (config) {
+    // Do something before request is sent
+    const token = localStorage.getItem("access_token");
+    const auth = token ? `Bearer ${token}` : "";
+    config.headers["Authorization"] = auth;
     return config;
-  }, function (error) {
+  },
+  function (error) {
     // Do something with request error
     return Promise.reject(error);
-  });
+  }
+);
 
 // Add a response interceptor
 instance.interceptors.response.use(
@@ -29,10 +30,7 @@ instance.interceptors.response.use(
     const originalRequest = error.config;
 
     // Nếu lỗi 401 và chưa retry → gọi refresh
-    if (
-      error.response?.status === 401 &&
-      !originalRequest._retry
-    ) {
+    if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
@@ -52,15 +50,13 @@ instance.interceptors.response.use(
         return instance(originalRequest);
       } catch (refreshErr) {
         console.error("❌ Refresh token failed, logging out...");
-        
-        
-        return Promise.reject(refreshErr); // ❌ Không gọi lại nữa
+
+        return Promise.reject(refreshErr);
       }
     }
 
-    // Nếu đã retry hoặc lỗi khác → trả lỗi
     return Promise.reject(error);
   }
 );
 
-export default instance
+export default instance;

@@ -8,7 +8,9 @@ import SearchPage from "./pages/client/search";
 import ArtistPage from "./pages/client/artist";
 import PlayerBar from "./components/layout/playbar.bottom";
 import { Routes, Route } from "react-router-dom";
-
+import LoginPage from "./pages/client/login";
+import RegisterPage from "./pages/client/register";
+import PlaylistPage from "./pages/client/playlist";
 function Layout() {
   const { setUser, isAppLoading, setIsAppLoading, setIsAuthenticated } = useCurrentApp();
 
@@ -37,6 +39,9 @@ function Layout() {
               <Route path="/" element={<HomePage />} />
               <Route path="/search" element={<SearchPage />} />
               <Route path="/artist/:artistId/:artistName" element={<ArtistPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/playlist/:playlistId/:playlistName" element={<PlaylistPage />} />
             </Routes>
           </div>
         </div>

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from playlists.models import Playlists
+from playlists.models import Playlists, Tracks
 
 class PlaylistSerializer(serializers.ModelSerializer):
     user_id = serializers.PrimaryKeyRelatedField(
@@ -14,3 +14,7 @@ class PlaylistSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return Playlists.objects.create(**validated_data)
+class TrackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tracks
+        fields = '__all__'

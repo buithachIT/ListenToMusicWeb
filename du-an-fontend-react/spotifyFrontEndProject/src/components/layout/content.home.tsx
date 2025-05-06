@@ -1,5 +1,5 @@
 import 'simplebar-react/dist/simplebar.min.css';
-import { getTopArtistAPI, getTrackAPI } from '../../services/api';
+import { getAllTracksAPI, getTopArtistAPI, getTrackAPI } from '../../services/api';
 import { useEffect, useRef, useState } from 'react';
 import { usePlayer } from '../context/player.context';
 import SimpleBar from 'simplebar-react';
@@ -37,7 +37,12 @@ const HomeContent = () => {
             setListTrack(res.data);
         }
     }
-
+    const handleGetAllTracks = async () => {
+        const res = await getAllTracksAPI();
+        if (res.data) {
+            setListTrack(res.data);
+        }
+    }
     const { setShowNowPlayingSideBar, user, openModalPremium, setOpenModalPremium } = useCurrentApp();
     const { setCurrentTrack, setIsPlaying, setCurrentIndex, setPlayList } = usePlayer();
     const handleClickTrack = (track: ITrack, index: number) => {
@@ -93,7 +98,7 @@ const HomeContent = () => {
                 {/* Header */}
                 < div className="flex justify-between items-center" >
                     <h1 className="text-2xl font-bold">Popular SONGS</h1>
-                    <button className="text-sm text-gray-400 hover:underline font-bold text-xs mr-3">Show all</button>
+                    <button className="text-sm text-gray-400 hover:underline font-bold text-xs mr-3" onClick={handleGetAllTracks}>Show all</button>
                 </div>
                 <div className="relative">
                     <SimpleBar forceVisible="x" autoHide={false} scrollableNodeProps={{ ref: scrollRef }}>

@@ -25,6 +25,7 @@ const PlaylistContent = ({ playlistId, playlistName }: PlaylistContentProps) => 
             try {
                 const res = await getPlaylistTracksAPI(playlistId);
                 if (res.data) {
+
                     setTrackResults(res.data);
                 }
             } catch (error) {
