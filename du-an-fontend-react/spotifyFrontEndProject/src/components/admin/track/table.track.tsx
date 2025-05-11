@@ -5,11 +5,14 @@ import { useEffect, useState } from 'react';
 import { getTrackAPI, deleteTrackAPI } from '../../../services/api';
 import { AxiosError } from 'axios';
 import AddTrack from './add.track';
+import UpdateTrack from './update.track';
 
 const TableTrack = () => {
     const [tracks, setTracks] = useState<ITrack[]>([]);
     const [loading, setLoading] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+    const [selectedTrack, setSelectedTrack] = useState<ITrack | null>(null);
     const [pagination, setPagination] = useState<TablePaginationConfig>({
         current: 1,
         pageSize: 5,
@@ -45,6 +48,11 @@ const TableTrack = () => {
                 message.error('Failed to delete track');
             }
         }
+    };
+
+    const handleUpdate = (track: ITrack) => {
+        setSelectedTrack(track);
+        setIsUpdateModalOpen(true);
     };
 
     useEffect(() => {
@@ -112,7 +120,7 @@ const TableTrack = () => {
                     <Button
                         type="text"
                         icon={<EditTwoTone twoToneColor="#f57800" />}
-                        onClick={() => console.log('Edit:', record)}
+                        onClick={() => handleUpdate(record)}
                     />
                     <Popconfirm
                         title="Delete Track"
@@ -138,7 +146,7 @@ const TableTrack = () => {
                 <Button
                     type="primary"
                     icon={<PlusOutlined />}
-                    onClick={() => setIsModalOpen(true)}
+                    onClick={() => setIsAddModalOpen(true)}
                 >
                     Add Track
                 </Button>
@@ -155,11 +163,21 @@ const TableTrack = () => {
                 }}
             />
             <AddTrack
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
+                isOpen={isAddModalOpen}
+                onClose={() => setIsAddModalOpen(false)}
                 onSuccess={fetchTracks}
-
             />
+            {selectedTrack && (
+                <UpdateTrack
+                    isOpen={isUpdateModalOpen}
+                    onClose={() => {
+                        setIsUpdateModalOpen(false);
+                        setSelectedTrack(null);
+                    }}
+                    onSuccess={fetchTracks}
+                    track={selectedTrack}
+                />
+            )}
         </div>
     );
 };

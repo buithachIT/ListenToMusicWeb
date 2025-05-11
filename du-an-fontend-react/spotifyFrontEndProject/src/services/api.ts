@@ -73,7 +73,7 @@ export const deleteUserAPI = (id: number) => {
 };
 //Get top music
 export const getTrackAPI = () => {
-  const urlBackend = "/tracks/top10track/";
+  const urlBackend = "/tracks/list/";
   return axios.get<IBackendRes<ITrack[]>>(urlBackend);
 };
 //get all tracks
@@ -105,7 +105,7 @@ export const createTrackAPI = (
   if (release_date) formData.append("release_date", release_date);
   if (is_copyright !== undefined)
     formData.append("is_copyright", is_copyright.toString());
-  if (file) formData.append("file", file);
+  if (file) formData.append("mp3", file);
   formData.append("listen", (listen || 0).toString());
 
   return axios.post<IBackendRes<ITrack>>(urlBackend, formData, {
@@ -149,34 +149,34 @@ export const deleteTrackAPI = (id: number) => {
   return axios.delete<IBackendRes<ITrack>>(urlBackend);
 };
 //Update track
-export const updateTrackAPI = (
-  track_id: number,
-  title?: string,
-  artist_id?: number,
-  album_id?: number | null,
-  namemp3?: string,
-  price?: number,
-  image_url?: string,
-  release_date?: string,
-  is_copyright?: number,
-  file?: File,
-  listen?: number
+export const updateTrackAPI = async (
+  trackId: number,
+  title: string,
+  artistId: number,
+  albumId: number | null,
+  namemp3: string,
+  price: number,
+  imageUrl: string,
+  releaseDate: string | undefined,
+  isCopyright: number,
+  mp3File?: File,
+  listen?: number,
+  mvFile?: File
 ) => {
-  const urlBackend = `/tracks/update/${track_id}/`;
   const formData = new FormData();
-  if (title) formData.append("title", title);
-  if (artist_id) formData.append("artist_id", artist_id.toString());
-  if (album_id) formData.append("album_id", album_id.toString());
-  if (namemp3) formData.append("namemp3", namemp3);
-  if (price) formData.append("price", price.toString());
-  if (image_url) formData.append("image_url", image_url);
-  if (release_date) formData.append("release_date", release_date);
-  if (is_copyright !== undefined)
-    formData.append("is_copyright", is_copyright.toString());
-  if (file) formData.append("file", file);
-  if (listen !== undefined) formData.append("listen", listen.toString());
+  formData.append("title", title);
+  formData.append("artist_id", artistId.toString());
+  if (albumId) formData.append("album_id", albumId.toString());
+  formData.append("namemp3", namemp3);
+  formData.append("price", price.toString());
+  formData.append("image_url", imageUrl);
+  if (releaseDate) formData.append("release_date", releaseDate);
+  formData.append("is_copyright", isCopyright.toString());
+  if (listen) formData.append("listen", listen.toString());
+  if (mp3File) formData.append("mp3", mp3File);
+  if (mvFile) formData.append("mv", mvFile);
 
-  return axios.put<IBackendRes<ITrack>>(urlBackend, formData, {
+  return await axios.put(`/tracks/update/${trackId}/`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

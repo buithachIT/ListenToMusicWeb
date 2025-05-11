@@ -1,10 +1,11 @@
-import { Modal, Form, Input, InputNumber, Button, message, Upload, Select } from 'antd';
+import { Modal, Form, Input, InputNumber, Button, message, Upload, Select, DatePicker } from 'antd';
 import { useState, useEffect } from 'react';
 import { getTopArtistAPI, createTrackAPI } from '../../../services/api';
 import { UploadOutlined } from '@ant-design/icons';
 import type { UploadFile } from 'antd/es/upload/interface';
 import type { RcFile } from 'antd/es/upload';
 import { AxiosError } from 'axios';
+import dayjs from 'dayjs';
 
 interface IProps {
     isOpen: boolean;
@@ -15,12 +16,15 @@ interface IProps {
 interface FieldType {
     title: string;
     artist_id: number;
-    album_id: number;
+    album_id: number | null;
     price: number;
     namemp3: string;
     is_copyright: number;
     listen: number;
     mv_url: string;
+    image_url: string;
+    release_date: string;
+    file?: UploadFile[];
 }
 
 const AddTrack = ({ isOpen, onClose, onSuccess }: IProps) => {
@@ -48,15 +52,17 @@ const AddTrack = ({ isOpen, onClose, onSuccess }: IProps) => {
         const isMP3 = file.type === 'audio/mpeg';
         if (!isMP3) {
             message.error('You can only upload MP3 files!');
+            return false;
         }
         const isLt10M = file.size / 1024 / 1024 < 10;
         if (!isLt10M) {
             message.error('File must be smaller than 10MB!');
+            return false;
         }
         return isMP3 && isLt10M;
     };
 
-    const handleChange = ({ fileList: newFileList }: { fileList: UploadFile[] }) => {
+    const handleFileChange = ({ fileList: newFileList }: { fileList: UploadFile[] }) => {
         setFileList(newFileList);
         if (newFileList.length > 0) {
             const fileName = newFileList[0].name;
@@ -67,19 +73,33 @@ const AddTrack = ({ isOpen, onClose, onSuccess }: IProps) => {
     const onFinish = async (values: FieldType) => {
         setLoading(true);
         try {
-            const file = fileList.length > 0 ? fileList[0].originFileObj : undefined;
+            if (!fileList.length) {
+                message.error('Please upload an MP3 file');
+                setLoading(false);
+                return;
+            }
+
+            const mp3File = fileList[0].originFileObj;
+            if (!mp3File) {
+                message.error('Invalid MP3 file');
+                setLoading(false);
+                return;
+            }
+
+            // Format release_date to YYYY-MM-DD
+            const formattedDate = values.release_date ? dayjs(values.release_date).format('YYYY-MM-DD') : undefined;
 
             await createTrackAPI(
                 values.title,
                 values.artist_id,
-                values.album_id || null,
+                values.album_id,
                 values.namemp3,
                 values.price,
-                undefined, // image_url
-                undefined, // release_date
+                values.image_url,
+                formattedDate,
                 values.is_copyright,
-                file,
-                values.listen || 0
+                mp3File,
+                values.listen
             );
 
             message.success('Track added successfully');
@@ -149,12 +169,21 @@ const AddTrack = ({ isOpen, onClose, onSuccess }: IProps) => {
                 <Form.Item<FieldType>
                     label="Price"
                     name="price"
+                    rules={[{ required: true, message: 'Please input the price!' }]}
                 >
                     <InputNumber
                         style={{ width: '100%' }}
                         min={0}
-                        step={1}
+                        step={0.01}
+                        precision={2}
                     />
+                </Form.Item>
+
+                <Form.Item<FieldType>
+                    label="Release Date"
+                    name="release_date"
+                >
+                    <DatePicker style={{ width: '100%' }} />
                 </Form.Item>
 
                 <Form.Item<FieldType>
@@ -165,12 +194,19 @@ const AddTrack = ({ isOpen, onClose, onSuccess }: IProps) => {
                     <Upload
                         beforeUpload={beforeUpload}
                         fileList={fileList}
-                        onChange={handleChange}
+                        onChange={handleFileChange}
                         maxCount={1}
                         accept=".mp3"
                     >
                         <Button icon={<UploadOutlined />}>Upload MP3</Button>
                     </Upload>
+                </Form.Item>
+
+                <Form.Item<FieldType>
+                    label="Cover Image URL"
+                    name="image_url"
+                >
+                    <Input placeholder="Enter image URL" />
                 </Form.Item>
 
                 <Form.Item<FieldType>
