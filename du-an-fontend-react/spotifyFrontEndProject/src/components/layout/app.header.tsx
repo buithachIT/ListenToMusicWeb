@@ -1,14 +1,45 @@
 import { useCurrentApp } from "../context/app.context";
 import { App, Avatar, Dropdown, Space } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import { logoutAPI } from "../../services/api";
-import { useState } from "react";
+import { logoutAPI, getTopArtistAPI } from "../../services/api";
+import { useState, useEffect, useRef } from "react";
+
+
 
 const Navbar = () => {
     const { isAuthenticated, setIsAuthenticated, user, setUser, setOpenModalPremium } = useCurrentApp();
     const navigate = useNavigate();
     const { message } = App.useApp();
     const [searchQuery, setSearchQuery] = useState('');
+    const [showHotArtists, setShowHotArtists] = useState(false);
+    const [hotArtists, setHotArtists] = useState<IArtist[]>([]);
+    const searchRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const fetchHotArtists = async () => {
+            try {
+                const res = await getTopArtistAPI();
+                if (res.data) {
+                    setHotArtists(res.data.slice(0, 3)); // Lấy 3 nghệ sĩ đầu tiên
+                }
+            } catch (error) {
+                console.error('Error fetching hot artists:', error);
+            }
+        };
+
+        fetchHotArtists();
+    }, []);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+                setShowHotArtists(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     const handleLogout = async () => {
         const res = await logoutAPI();
@@ -25,7 +56,14 @@ const Navbar = () => {
         if (searchQuery.trim()) {
             navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
             setSearchQuery('');
+            setShowHotArtists(false);
         }
+    };
+
+    const handleArtistSelect = (artistName: string) => {
+        setSearchQuery(artistName);
+        setShowHotArtists(false);
+        navigate(`/search?q=${encodeURIComponent(artistName)}`);
     };
 
     const handleHomeClick = () => {
@@ -78,29 +116,60 @@ const Navbar = () => {
                 </div>
 
                 {/* Search bar */}
-                <form onSubmit={handleSearch} className="flex items-center bg-white/10 rounded-full px-4 py-2 flex-1 max-w-md">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 text-gray-400 mr-2"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1116.65 16.65z"
+                <div ref={searchRef} className="relative flex-1 max-w-xl">
+                    <form onSubmit={handleSearch} className="flex items-center bg-white/10 rounded-full px-6 py-2.5">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4 text-gray-400 mr-3"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1116.65 16.65z"
+                            />
+                        </svg>
+                        <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            onFocus={() => setShowHotArtists(true)}
+                            placeholder="What do you want to play?"
+                            className="bg-transparent text-white text-sm w-full focus:outline-none"
                         />
-                    </svg>
-                    <input
-                        type="text"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="What do you want to play?"
-                        className="bg-transparent text-white text-sm w-full focus:outline-none"
-                    />
-                </form>
+                    </form>
+                    {showHotArtists && hotArtists.length > 0 && (
+                        <div className="absolute top-full left-0 right-0 mt-2 bg-zinc-900 rounded-lg shadow-xl border border-white/10 overflow-hidden z-50">
+                            <div className="p-3 border-b border-white/10">
+                                <h3 className="text-sm font-medium text-gray-400">Nghệ sĩ nổi bật</h3>
+                            </div>
+                            <div>
+                                {hotArtists.map((artist) => (
+                                    <div
+                                        key={artist.artist_id}
+                                        className="flex items-center gap-3 p-3 hover:bg-white/10 cursor-pointer transition-colors duration-200"
+                                        onClick={() => handleArtistSelect(artist.name)}
+                                    >
+                                        <div className="w-10 h-10 rounded-full overflow-hidden">
+                                            <img
+                                                src={artist.avatar}
+                                                alt={artist.name}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                        <div>
+                                            <div className="text-sm font-medium text-white">{artist.name}</div>
+                                            <div className="text-xs text-gray-400">Nghệ sĩ</div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
             </div>
 
             {/* Right section */}

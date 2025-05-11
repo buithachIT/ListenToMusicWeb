@@ -1,6 +1,4 @@
 import AppHeader from "./components/layout/app.header";
-import { useEffect } from "react";
-import { fetchAccountAPI } from "./services/api";
 import { useCurrentApp } from "./components/context/app.context";
 import { PacmanLoader } from "react-spinners";
 import HomePage from "./pages/client/home";
@@ -11,20 +9,9 @@ import { Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/client/login";
 import RegisterPage from "./pages/client/register";
 import PlaylistPage from "./pages/client/playlist";
-function Layout() {
-  const { setUser, isAppLoading, setIsAppLoading, setIsAuthenticated } = useCurrentApp();
 
-  useEffect(() => {
-    const fetchAccount = async () => {
-      const res = await fetchAccountAPI();
-      if (res.data) {
-        setUser(res.data.user);
-        setIsAuthenticated(true);
-      }
-      setIsAppLoading(false);
-    }
-    fetchAccount();
-  }, []);
+function Layout() {
+  const { isAppLoading } = useCurrentApp();
 
   return (
     <>

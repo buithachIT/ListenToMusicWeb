@@ -37,12 +37,26 @@ export const AppProvider = (props: TProps) => {
                 return;
             }
 
-            const res = await fetchAccountAPI();
-            if (res.data) {
-                setUser(res.data.user);
-                setIsAuthenticated(true);
+            try {
+                const res = await fetchAccountAPI();
+                if (res.data) {
+                    setUser(res.data.user);
+                    setIsAuthenticated(true);
+                } else {
+                    // Clear invalid token
+                    localStorage.removeItem("access_token");
+                    setIsAuthenticated(false);
+                    setUser(null);
+                }
+            } catch (error) {
+                console.error("Error fetching user profile:", error);
+                // Clear invalid token
+                localStorage.removeItem("access_token");
+                setIsAuthenticated(false);
+                setUser(null);
+            } finally {
+                setIsAppLoading(false);
             }
-            setIsAppLoading(false);
         };
 
         init();

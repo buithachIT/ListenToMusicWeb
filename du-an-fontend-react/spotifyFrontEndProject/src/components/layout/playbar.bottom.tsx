@@ -35,12 +35,20 @@ const PlayerBar = () => {
     }, [volume])
 
     if (!currentTrack) return (
-        <div className="fixed bottom-0 left-0 w-full h-20 bg-zinc-900 flex items-center justify-center text-white text-sm italic">
-            Chưa chọn bài hát nào
+        <div className="fixed bottom-0 left-0 w-full h-24 bg-gradient-to-r from-zinc-900 to-black border-t border-gray-800 flex items-center justify-center text-white">
+            <div className="flex flex-col items-center gap-2">
+                <div className="w-12 h-12 rounded-full bg-zinc-800 flex items-center justify-center">
+                    <i className="fa fa-music text-zinc-600 text-xl"></i>
+                </div>
+                <div className="flex flex-col items-center">
+                    <p className="text-sm font-medium">Chưa chọn bài hát nào</p>
+                    <p className="text-xs text-zinc-500">Chọn một bài hát để bắt đầu nghe nhạc</p>
+                </div>
+            </div>
         </div>
     );
 
-    const urlTrack = `${import.meta.env.VITE_BACKEND_URL}/media/music_file/${encodeURIComponent(currentTrack.namemp3)}`
+    const urlTrack = `${import.meta.env.VITE_BACKEND_URL}/public/music_file/${encodeURIComponent(currentTrack.namemp3)}`
 
     //format duration
     const formatTime = (seconds: number): string => {

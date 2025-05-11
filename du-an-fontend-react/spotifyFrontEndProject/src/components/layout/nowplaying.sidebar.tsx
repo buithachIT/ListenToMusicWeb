@@ -61,7 +61,7 @@ const NowPlayingSidebar = () => {
             console.error('Download error:', error);
         }
     }
-    const mv_url = `${import.meta.env.VITE_BACKEND_URL}/media/mv_file/${currentTrack.mv_url}`;
+    const mv_url = `${import.meta.env.VITE_BACKEND_URL}/public/mv_file/${currentTrack.mv_url}`;
     return (
         <>
             <SimpleBar className="w-[350px] max-h-screen p-4 bg-zinc-990 text-white border-l border-zinc-800 relative" autoHide={false}>
