@@ -47,6 +47,13 @@ class CreateTrackView(APIView):
             mp3_name = data.get('namemp3') or f"{uuid.uuid4().hex}_{mp3_file.name}"
             mp3_path = default_storage.save(f'music_file/{mp3_name}', mp3_file)
             data['namemp3'] = mp3_name
+            mv_file = request.FILES.get('mv')
+            if mv_file:
+                mv_name = f"{uuid.uuid4().hex}_{mv_file.name}"
+                mv_path = default_storage.save(f'mv_file/{mv_name}', mv_file)
+                data['mv_url'] = f"{mv_name}"
+            else:
+                data['mv_url'] = None
 
             # Validate data
             serializer = TrackSerializer(data=data)
@@ -192,16 +199,7 @@ class UpdateTrackView(APIView):
                 mv_name = f"{uuid.uuid4().hex}_{mv_file.name}"
                 mv_path = default_storage.save(f'mv_file/{mv_name}', mv_file)
                 data['mv_url'] = f'{mv_name}'
-
-            # Handle album changes
-            old_album = track.album
-            new_album_id = data.get('album_id')
-            
-            if old_album and old_album.id != new_album_id:
-                # Decrease total_tracks of old album
-                if old_album.total_tracks is not None and old_album.total_tracks > 0:
-                    old_album.total_tracks -= 1
-                    old_album.save()
+           
 
             # Validate and save data
             serializer = TrackSerializer(track, data=data, partial=True)
