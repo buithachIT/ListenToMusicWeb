@@ -92,7 +92,8 @@ export const createTrackAPI = (
   release_date?: string,
   is_copyright?: number,
   file?: File,
-  listen?: number
+  listen?: number,
+  mvFile?: File
 ) => {
   const urlBackend = "/tracks/create/";
   const formData = new FormData();
@@ -106,6 +107,7 @@ export const createTrackAPI = (
   if (is_copyright !== undefined)
     formData.append("is_copyright", is_copyright.toString());
   if (file) formData.append("mp3", file);
+  if (mvFile) formData.append("mv", mvFile);
   formData.append("listen", (listen || 0).toString());
 
   return axios.post<IBackendRes<ITrack>>(urlBackend, formData, {
