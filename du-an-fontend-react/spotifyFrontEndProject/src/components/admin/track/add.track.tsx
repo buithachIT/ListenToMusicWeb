@@ -186,13 +186,6 @@ const AddTrack = ({ isOpen, onClose, onSuccess }: IProps) => {
                 </Form.Item>
 
                 <Form.Item<FieldType>
-                    label="Album ID"
-                    name="album_id"
-                >
-                    <InputNumber style={{ width: '100%' }} />
-                </Form.Item>
-
-                <Form.Item<FieldType>
                     label="Price"
                     name="price"
                     rules={[{ required: true, message: 'Please input the price!' }]}
