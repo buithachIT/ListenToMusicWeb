@@ -2,7 +2,7 @@ import { EditTwoTone, DeleteTwoTone, PlusOutlined } from '@ant-design/icons';
 import { Table, Popconfirm, Button, Space, message, Image } from 'antd';
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import { useEffect, useState } from 'react';
-import { getTrackAPI, deleteTrackAPI } from '../../../services/api';
+import { getAllTracksAPI, deleteTrackAPI } from '../../../services/api';
 import { AxiosError } from 'axios';
 import AddTrack from './add.track';
 import UpdateTrack from './update.track';
@@ -22,7 +22,7 @@ const TableTrack = () => {
     const fetchTracks = async () => {
         setLoading(true);
         try {
-            const res = await getTrackAPI();
+            const res = await getAllTracksAPI();
             if (res?.data) {
                 setTracks(res.data);
                 setPagination(prev => ({

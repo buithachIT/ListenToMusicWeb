@@ -153,7 +153,7 @@ const HomeContent = () => {
                                         </div>
                                     </div>
                                     <h3 className="text-sm font-semibold truncate mt-2">{item.title}</h3>
-                                    <p className="text-xs text-gray-400">{item.price}</p>
+
                                 </div>
                             ))}
                         </div>
