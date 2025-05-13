@@ -1,6 +1,4 @@
-import { Modal, Form, Input, InputNumber, Upload, Button, message } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import type { UploadFile, RcFile } from 'antd/es/upload/interface';
+import { Modal, Form, Input, InputNumber, Button, message } from 'antd';
 import { useState } from 'react';
 import { createArtistAPI } from '../../../services/api';
 import { AxiosError } from 'axios';
@@ -22,32 +20,11 @@ interface ArtistFormValues {
 const AddSinger = ({ isOpen, onClose, onSuccess }: AddSingerProps) => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
-    const [fileList, setFileList] = useState<UploadFile[]>([]);
-
-    const beforeUpload = (file: RcFile) => {
-        const isImage = file.type.startsWith('image/');
-        if (!isImage) {
-            message.error('You can only upload image files!');
-        }
-        const isLt2M = file.size / 1024 / 1024 < 2;
-        if (!isLt2M) {
-            message.error('Image must be smaller than 2MB!');
-        }
-        return isImage && isLt2M;
-    };
-
-    const handleChange = ({ fileList }: { fileList: UploadFile[] }) => {
-        setFileList(fileList);
-        if (fileList.length > 0 && fileList[0].originFileObj) {
-            form.setFieldValue('avatar', fileList[0].originFileObj.name);
-        }
-    };
 
     const onFinish = async (values: ArtistFormValues) => {
         setLoading(true);
         try {
             const { name, gener, popularity_score, follower, avatar } = values;
-            const file = fileList[0]?.originFileObj;
 
             await createArtistAPI(
                 name,
@@ -55,14 +32,13 @@ const AddSinger = ({ isOpen, onClose, onSuccess }: AddSingerProps) => {
                 popularity_score,
                 follower,
                 avatar,
-                file
+                undefined // No file upload needed
             );
 
             message.success('Artist added successfully');
             onSuccess();
             onClose();
             form.resetFields();
-            setFileList([]);
         } catch (error) {
             if (error instanceof AxiosError) {
                 message.error(error.response?.data?.message || 'Failed to add artist');
@@ -117,17 +93,10 @@ const AddSinger = ({ isOpen, onClose, onSuccess }: AddSingerProps) => {
 
                 <Form.Item
                     name="avatar"
-                    label="Avatar"
-                    rules={[{ required: true, message: 'Please upload an avatar!' }]}
+                    label="Avatar URL"
+                    rules={[{ required: true, message: 'Please input avatar URL!' }]}
                 >
-                    <Upload
-                        beforeUpload={beforeUpload}
-                        fileList={fileList}
-                        onChange={handleChange}
-                        maxCount={1}
-                    >
-                        <Button icon={<UploadOutlined />}>Upload Avatar</Button>
-                    </Upload>
+                    <Input placeholder="Enter image URL" />
                 </Form.Item>
 
                 <Form.Item>

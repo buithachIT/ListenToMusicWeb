@@ -17,6 +17,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.core.files.storage import default_storage
 import uuid
+from playlist_detail.models import Playlists_Detail
 
 
 from django.core.files.storage import default_storage
@@ -79,22 +80,18 @@ class DeleteTrackView(APIView):
     def delete(self, request, track_id):
         try:
             track = Tracks.objects.get(pk=track_id)
-
-            # Nếu track thuộc album nào đó, giảm total_tracks
-            if track.album:
-                album = track.album
-                if album.total_tracks is not None and album.total_tracks > 0:
-                    album.total_tracks -= 1
-                    album.save()
-
-            # Xóa bài hát
             track.delete()
-
             return Response({"message": "Xóa bài hát thành công!"}, status=status.HTTP_200_OK)
-
         except Tracks.DoesNotExist:
-            return Response({"message": f"Bài hát với id={track_id} không tồn tại."},
-                            status=status.HTTP_404_NOT_FOUND)
+            return Response({
+                "message": f"Bài hát với id={track_id} không tồn tại."
+            }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            print(f"Error deleting track: {str(e)}")
+            return Response({
+                "message": f"Lỗi khi xóa bài hát: {str(e)}"
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 @api_view(['GET'])
 def GetTrackbyAlbums(request, album_id):
     

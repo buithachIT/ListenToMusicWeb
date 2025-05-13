@@ -73,7 +73,7 @@ export const deleteUserAPI = (id: number) => {
 };
 //Get top music
 export const getTrackAPI = () => {
-  const urlBackend = "/tracks/list/";
+  const urlBackend = "/tracks/top10track/";
   return axios.get<IBackendRes<ITrack[]>>(urlBackend);
 };
 //get all tracks

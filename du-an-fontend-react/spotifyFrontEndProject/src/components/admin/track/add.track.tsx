@@ -6,6 +6,7 @@ import type { UploadFile } from 'antd/es/upload/interface';
 import type { RcFile } from 'antd/es/upload';
 import { AxiosError } from 'axios';
 import dayjs from 'dayjs';
+import { NULL } from 'sass';
 
 interface IProps {
     isOpen: boolean;
@@ -186,19 +187,6 @@ const AddTrack = ({ isOpen, onClose, onSuccess }: IProps) => {
                 </Form.Item>
 
                 <Form.Item<FieldType>
-                    label="Price"
-                    name="price"
-                    rules={[{ required: true, message: 'Please input the price!' }]}
-                >
-                    <InputNumber
-                        style={{ width: '100%' }}
-                        min={0}
-                        step={0.01}
-                        precision={2}
-                    />
-                </Form.Item>
-
-                <Form.Item<FieldType>
                     label="Release Date"
                     name="release_date"
                 >
@@ -246,7 +234,6 @@ const AddTrack = ({ isOpen, onClose, onSuccess }: IProps) => {
                 <Form.Item<FieldType>
                     label="Copyright Status"
                     name="is_copyright"
-                    rules={[{ required: true, message: 'Please select copyright status!' }]}
                 >
                     <Select
                         options={[

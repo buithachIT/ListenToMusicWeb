@@ -33,6 +33,7 @@ const LoginPage = () => {
         } else {
             console.log("Check res if false>>", res)
             message.error(res.non_field_errors);
+            setIsSubmit(false);
         }
     }
 

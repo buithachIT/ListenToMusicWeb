@@ -22,11 +22,21 @@ instance.interceptors.request.use(
 
 // Add a response interceptor
 instance.interceptors.response.use(
-  (response) => {
-    if (response && response.data) return response.data;
+  function (response) {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // Do something with response data
+    if (response && response.data) {
+      return response.data;
+    }
     return response;
   },
-  async (error) => {
+  async function (error) {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    if (error && error.response && error.response.data) {
+      return error.response.data;
+    }
+
     const originalRequest = error.config;
 
     // Nếu lỗi 401 và chưa retry → gọi refresh
@@ -50,7 +60,6 @@ instance.interceptors.response.use(
         return instance(originalRequest);
       } catch (refreshErr) {
         console.error("❌ Refresh token failed, logging out...");
-
         return Promise.reject(refreshErr);
       }
     }

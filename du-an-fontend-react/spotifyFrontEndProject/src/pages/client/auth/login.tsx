@@ -35,7 +35,8 @@ const LoginPage = () => {
             navigate('/')
         } else {
             console.log("Check res if false>>", res)
-            message.error("Không thành công ", res.detail);
+            message.error(res.non_field_errors);
+            setIsSubmit(false);
         }
     }
 

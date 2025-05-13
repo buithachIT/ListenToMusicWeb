@@ -129,7 +129,7 @@ const HomeContent = () => {
                                 >
                                     {(user?.is_superuser == 0) ?
                                         (
-                                            item.is_copyright && (
+                                            (item.is_copyright == 1) && (
                                                 <span className="absolute top-2 left-2 text-black text-xs font-bold px-2 py-0.5 rounded-full shadow-lg z-10">
                                                     <i className="fa-solid fa-crown text-yellow-400 drop-shadow-md"></i>
                                                 </span>
@@ -137,7 +137,7 @@ const HomeContent = () => {
                                         )
                                         :
                                         (
-                                            item.is_copyright && (
+                                            (item.is_copyright == 1) && (
                                                 <span className="absolute top-2 left-2 text-black text-xs font-bold px-2 py-0.5 rounded-full shadow-lg z-10">
                                                     <i className="fa-solid fa-crown premium-text drop-shadow-md"></i>
                                                 </span>
