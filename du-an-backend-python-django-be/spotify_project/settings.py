@@ -177,5 +177,8 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True
-MEDIA_URL = '/public/'
+# Đường dẫn đến thư mục lưu trữ file media
 MEDIA_ROOT = os.path.join(BASE_DIR, 'public')
+
+# URL để truy cập các file media
+MEDIA_URL = '/media/'

@@ -24,7 +24,10 @@ album AS al
 artist AS a
 Với sơ đồ này, hãy viết câu lệnh MySQL để trả lời câu hỏi sau
 Chỉ tạo SELECT SQL (không có dấu chấm phẩy), sử dụng dấu ngoặc kép, không giải thích.
+Những câu hỏi thực hiện so sánh gần giống
 Có thể dùng các so sánh linh hoạt.
+Nếu câu hỏi là 1 ngữ cảnh giao tiếp thì k cần sinh sql nhé
+
 Q: "{question}"
 SQL:
 """
@@ -88,7 +91,7 @@ Kết quả truy vấn: {result}
 Bạn là 1 nhà phân tích dữ liệu tài ba có thể trả lời các câu hỏi liên quan tới Web nghe nhạc Spotify
 Hãy trả lời câu hỏi trên bằng tiếng Việt có cảm xúc, thân thiện và lịch sự dựa vào kết quả truy vấn.
 Chỉ trả lời ngắn gọn, đúng vào nội dung, không giải thích SQL.
-Đừng đưa các biến id, hoặc trả lời liên quan đến dữ liệu
+Đừng đưa các biến liên quan tới ID, và đừng nhắc tới dùng cơ sở dữ liệu hay gì.
 
 Nếu câu hỏi là 1 ngữ cảnh giao tiếp thì k cần sinh sql nhé
 
